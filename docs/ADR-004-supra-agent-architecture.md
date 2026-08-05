@@ -96,13 +96,19 @@ distribuible (RC1, ver su propio repo).
 
 ## Pendiente para las próximas iteraciones
 
-- **Empaquetar `d365-requirements-analyst`, `bpc-analyser`, `licensing-analyser`,
-  `rfp-manager`, `d365crm-resoruces-estimator` como un plugin** (ej. `axxon-presales-suite`),
-  siguiendo el mismo proceso que se usó para Axxon Dataverse Architect (carpeta + `SKILL.md` +
-  `plugin.json`). Es el prerequisito real para que `presales-analyst` sea portable al equipo.
+- **Empaquetar `d365-requirements-analyst` y `bpc-analyser` como el plugin `axxon-sprint0-suite`**
+  (en curso — ver repo separado). Cubre específicamente el trabajo de Sprint 0: análisis de
+  requerimientos y encuadre contra el Business Process Catalog.
+- **`licensing-analyser`, `rfp-manager`, `d365crm-resoruces-estimator` quedan explícitamente
+  fuera de este empaquetado por decisión del arquitecto** — no forman parte de Sprint 0 en su
+  metodología; probablemente correspondan a una etapa de presales *anterior* al Sprint 0
+  (evaluación de propuesta antes de que el proyecto arranque). Sin plugin propio todavía; se
+  define cuándo se retoma.
 - **Empaquetar `ado-daily-prep`, `ado-us-planner` (+ `ado-connector` como dependencia interna,
   no como skill de usuario) como un plugin** (ej. `axxon-delivery-suite`), mismo criterio, para
   que `delivery-manager` sea portable.
-- Una vez existan esos dos plugins, actualizar `plugin.json` de `axxon-dataverse-agent` para
-  declararlos como `dependencies` reales, en vez de solo referenciar skills sueltas por nombre.
+- Una vez existan `axxon-sprint0-suite` y `axxon-delivery-suite`, actualizar `plugin.json` de
+  `axxon-dataverse-agent` para declararlos como `dependencies` reales, y revisar si el
+  subagente `presales-analyst` necesita renombrarse/dividirse para reflejar la distinción
+  Sprint 0 vs. presales pre-Sprint 0 que introdujo este cambio.
 - Resolver el rework de `output-formatter` (pendiente de otro proyecto) antes de sumarlo acá.
