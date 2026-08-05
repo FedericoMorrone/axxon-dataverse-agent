@@ -1,15 +1,16 @@
 # Axxon Dataverse Agent — Repositorio
 
 Supraagente orquestador de Axxon Consulting para proyectos Dynamics 365 / Power Platform.
-Comanda tres subagentes especializados por fase (presales, build, delivery) usando el
-mecanismo nativo de **Subagents** de Claude Code/Cowork.
+Comanda subagentes especializados por fase de **Success by Design** (Microsoft) usando el
+mecanismo nativo de **Subagents** de Claude Code/Cowork — no Agent Teams.
 
-Ver `docs/ADR-004-supra-agent-architecture.md` para la decisión arquitectónica completa
-(por qué Subagents y no Agent Teams, cómo se agruparon las fases, y la limitación real de
-ahora los 3 subagentes son portables — ver v0.2.0).
+Ver `docs/ADR-004-supra-agent-architecture.md` para la decisión arquitectónica completa: por
+qué Subagents, cómo se numeran y agrupan las fases (0-4), el mecanismo de logs por fase, y el
+estado de portabilidad de cada subagente.
 
-**Estado actual: v0.3.0** (los 3 subagentes son portables y ya están mapeados contra Success
-by Design de Microsoft; ver ADR-004 para los gaps de fase pendientes — no bloqueante).
+**Estado actual: v0.4.0** — 5 subagentes definidos (Fase 0 a Fase 3, más Fase 4 explícitamente
+sin agentizar), 4 de ellos funcionales hoy. `strategize-analyst` (Fase 0) existe como stub
+bloqueado hasta empaquetar su plugin de contenido.
 
 ---
 
@@ -23,9 +24,11 @@ axxon-dataverse-agent/
 │   └── axxon-dataverse-agent/
 │       ├── .claude-plugin/plugin.json
 │       ├── agents/
-│       │   ├── sprint0-analyst.md
-│       │   ├── dataverse-builder.md
-│       │   └── delivery-manager.md
+│       │   ├── strategize-analyst.md   ← Fase 0 · BLOQUEADO, stub sin contenido
+│       │   ├── sprint0-analyst.md      ← Fase 1
+│       │   ├── dataverse-builder.md    ← Fase 2
+│       │   ├── delivery-manager.md     ← Fase 2 (paralelo)
+│       │   └── deploy-manager.md       ← Fase 3
 │       ├── skills/axxon-orchestrator/SKILL.md
 │       ├── README.md
 │       └── CHANGELOG.md
@@ -36,8 +39,8 @@ axxon-dataverse-agent/
 ## Relación con Axxon Dataverse Architect
 
 Este repo **depende de** `axxon-dataverse-architect` (repo separado, ya en RC1) — no lo
-contiene ni lo reemplaza. `dataverse-builder` simplemente delega en la skill
-`dataverse-architect` de ese plugin.
+contiene ni lo reemplaza. `dataverse-builder` y `deploy-manager` delegan en la skill
+`dataverse-architect` de ese plugin, cada uno con un encuadre de fase distinto.
 
 ## Instalación
 
@@ -47,4 +50,5 @@ contiene ni lo reemplaza. `dataverse-builder` simplemente delega en la skill
 ```
 
 Requiere tener también instalados `axxon-dataverse-architect`, `axxon-sprint0-suite`, y
-`axxon-delivery-suite` — los tres quedan declarados como `dependencies` en `plugin.json`.
+`axxon-delivery-suite` — declarados como `dependencies` en `plugin.json`. `strategize-analyst`
+queda sin efecto hasta que `axxon-strategize-suite` exista y se agregue como dependencia.

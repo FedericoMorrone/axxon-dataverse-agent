@@ -42,3 +42,17 @@ patrón jerárquico buscado).
   parcialmente por solution-packager.
 - Corregidas referencias residuales a "presales-analyst" que habían quedado sin actualizar en
   dataverse-builder.md, delivery-manager.md, y README.md tras el rename de v0.2.0.
+
+## v0.4.0 (2026-08-05)
+
+- Numeración explícita de fases: Fase 0 Strategize, Fase 1 Plan, Fase 2 Implement, Fase 3
+  Deploy, Fase 4 Operate (sin agentizar).
+- Nuevo subagente `deploy-manager` (Fase 3) — reutiliza `dataverse-architect`, sin contenido
+  nuevo, encuadrado para promoción/cutover en vez de construcción.
+- Nuevo stub `strategize-analyst` (Fase 0) — bloqueado, `skills: []`, a la espera de empaquetar
+  `axxon-strategize-suite` (licensing-analyser, rfp-manager, d365crm-resoruces-estimator).
+- Nuevo mecanismo de identificación de fase por chat: cada consultor trabaja un chat por fase
+  ("Fase N - Nombre"); `axxon-orchestrator` pregunta la fase si no es evidente.
+- Modelo de sesión reemplazado: de un `.d365-session.md` único a `.d365-project.md` (estático,
+  compartido) + `.d365-fases/fase-N-nombre.md` (un log de acciones por fase, evita condiciones
+  de carrera entre fases trabajadas en paralelo).

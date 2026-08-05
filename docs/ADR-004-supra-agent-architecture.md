@@ -94,7 +94,28 @@ para este propósito.
 solo parcialmente por una skill que vive dentro de otro subagente. Esto se documenta
 explícitamente como gap, no se fuerza un mapeo 1:1 artificial solo para completar la tabla.
 
+## Decisión 2c — Numeración de fases y logs por fase, no un log único
 
+Se adopta numeración explícita alineada a Success by Design: **Fase 0 = Strategize, Fase 1 =
+Plan, Fase 2 = Implement, Fase 3 = Deploy, Fase 4 = Operate** (sin agentizar). Cada consultor
+trabaja un chat de Cowork por fase, nombrado por convención "Fase N - Nombre".
+
+Se agrega el subagente **`deploy-manager`** (Fase 3), que no requiere contenido nuevo — delega
+en la misma skill `dataverse-architect` que ya usa `dataverse-builder`, con un encuadre de fase
+distinto (promoción/cutover en vez de construcción).
+
+**Cambio de modelo de sesión:** el `.d365-session.md` único (definido en ADR-003 del proyecto
+Axxon Dataverse Architect) se reemplaza por dos tipos de archivo:
+- `.d365-project.md` — contexto estático (environment, solución, publisher, repo ADO),
+  compartido por todas las fases.
+- `.d365-fases/fase-N-nombre.md` — un log de acciones por fase, independiente.
+
+Razón: con múltiples chats trabajando fases distintas en paralelo, un solo archivo compartido
+para el historial de acciones generaría condiciones de carrera (el último en guardar pisa a
+los demás). Separar por fase elimina ese riesgo sin necesitar ningún mecanismo de lock — cada
+archivo tiene un solo escritor natural (la conversación de esa fase).
+
+## Decisión 3 — Mecanismo técnico: `skills:` en el frontmatter del agent
 
 Un subagente (`agents/*.md`) puede declarar `skills:` con una lista de nombres de skill, y
 Claude Code inyecta el contenido completo de cada una en el contexto del subagente al
@@ -125,16 +146,12 @@ sección ya no aplica.
 
 ## Pendiente para las próximas iteraciones
 
-- Definir/construir un subagente para **Strategize** (business case, engagement inicial) —
-  hoy sin cobertura. Nota: probablemente se solape con `licensing-analyser`/`rfp-manager`
-  (ver ítem de abajo), ya que Strategize es previo a Sprint 0 en la práctica de Axxon.
-- Definir/construir un subagente para **Operate** (soporte post go-live, mejora continua) —
-  hoy sin cobertura, no existe ninguna skill de Axxon para esto todavía.
-- Evaluar si **Deploy** necesita un subagente propio (cutover, hypercare) o si alcanza con
-  que `dataverse-builder`/`solution-packager` la cubran como ya lo hacen parcialmente.
-- Empaquetar `licensing-analyser`, `rfp-manager`, `d365crm-resoruces-estimator` como plugin
-  propio (etapa de presales anterior a Sprint 0) si en algún momento se retoma esa etapa como
-  parte del supraagente — hoy queda deliberadamente fuera.
+- Empaquetar `licensing-analyser`, `rfp-manager`, `d365crm-resoruces-estimator` como el plugin
+  `axxon-strategize-suite` para poder construir el subagente `strategize-analyst` (Fase 0) —
+  bloqueado hasta que se suban esas 3 carpetas (mismo proceso que `axxon-sprint0-suite`).
+- **Fase 3 (Deploy) — resuelto**: `deploy-manager` ya existe, reutilizando `dataverse-architect`
+  sin contenido nuevo.
+- **Fase 4 (Operate)** — decisión explícita de no agentizar por ahora, no es un gap a cerrar.
 - Empaquetar `ado-connector` como módulo compartido real entre `ado-daily-prep` y
   `ado-us-planner` (hoy cada una tiene su propia implementación duplicada) — refactor, no
   bloqueante.
