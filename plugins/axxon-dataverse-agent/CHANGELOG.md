@@ -21,3 +21,14 @@ patrón jerárquico buscado).
   `licensing-analyser`, `rfp-manager`, `d365crm-resoruces-estimator`) como plugin propio.
 - Empaquetar las skills de delivery (`ado-daily-prep`, `ado-us-planner`) como plugin propio.
 - Resolver `output-formatter` (pendiente de otro proyecto) antes de incorporarlo.
+
+## v0.2.0 (2026-08-05)
+
+- Empaquetados `axxon-sprint0-suite` (d365-requirements-analyst, bpc-analyser) y
+  `axxon-delivery-suite` (ado-daily-prep, ado-us-planner) como plugins reales.
+- Renombrado `presales-analyst` → `sprint0-analyst`, acotado su `skills:` a las 2 skills
+  realmente empaquetadas (licensing-analyser, rfp-manager, d365crm-resoruces-estimator quedan
+  fuera por decisión explícita — no son Sprint 0).
+- `plugin.json` ahora declara `axxon-dataverse-architect`, `axxon-sprint0-suite`, y
+  `axxon-delivery-suite` como `dependencies` reales.
+- Los 3 subagentes son portables al equipo — resuelta la limitación documentada en v0.1.0.

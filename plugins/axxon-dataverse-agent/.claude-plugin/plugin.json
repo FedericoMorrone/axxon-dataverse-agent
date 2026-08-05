@@ -1,14 +1,16 @@
 {
   "name": "axxon-dataverse-agent",
   "displayName": "Axxon Dataverse Agent",
-  "version": "0.1.0",
-  "description": "Supraagente orquestador de Axxon Consulting para proyectos Dynamics 365 / Power Platform: coordina subagentes especializados por fase (presales-analyst, dataverse-builder, delivery-manager) a lo largo de todo el ciclo de vida del proyecto.",
+  "version": "0.2.0",
+  "description": "Supraagente orquestador de Axxon Consulting para proyectos Dynamics 365 / Power Platform: coordina subagentes especializados por fase (sprint0-analyst, dataverse-builder, delivery-manager) a lo largo de todo el ciclo de vida del proyecto.",
   "author": {
     "name": "Axxon Consulting"
   },
   "license": "UNLICENSED",
   "keywords": ["dataverse", "dynamics-365", "d365", "power-platform", "orchestrator", "axxon"],
   "dependencies": [
-    "axxon-dataverse-architect"
+    "axxon-dataverse-architect",
+    "axxon-sprint0-suite",
+    "axxon-delivery-suite"
   ]
 }

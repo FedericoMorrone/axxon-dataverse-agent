@@ -21,19 +21,23 @@ vida está el pedido y delegás al subagente correspondiente.
 ## Mapa de fases y subagentes
 
 ```
-Presales / Discovery ──────► Build / Implementación ──────► Delivery / Gobierno ALM
-   presales-analyst              dataverse-builder                delivery-manager
-   (RFP, BPC, licensing,         (dataverse-architect →           (ado-daily-prep,
-    estimación de esfuerzo)       entity-builder, forms,           ado-us-planner)
-                                  business rules, seguridad,
-                                  ALM vía Azure DevOps)
+Sprint 0 ───────────────────► Build / Implementación ──────► Delivery / Gobierno ALM
+   sprint0-analyst                dataverse-builder                delivery-manager
+   (requerimientos, BPC)          (dataverse-architect →           (ado-daily-prep,
+                                   entity-builder, forms,           ado-us-planner)
+                                   business rules, seguridad,
+                                   ALM vía Azure DevOps)
 ```
 
 | Subagente | Fase | Cuándo invocarlo |
 |---|---|---|
-| `presales-analyst` | Presales / Discovery | RFP, requerimientos, licenciamiento, estimación, propuesta técnica |
+| `sprint0-analyst` | Sprint 0 | RFP, notas de reunión, transcripciones, requerimientos, mapeo contra el BPC |
 | `dataverse-builder` | Build / Implementación | Tablas, forms, business rules, vistas, seguridad, promoción de solución |
 | `delivery-manager` | Delivery / Gobierno ALM | Daily, standup, sprint, desglose de User Stories en tasks |
+
+> Licenciamiento, respuesta formal a RFP, y estimación de esfuerzo quedan explícitamente fuera
+> del alcance de `sprint0-analyst` — no forman parte de Sprint 0 en la metodología de Axxon, y
+> no tienen subagente propio todavía (ver ADR-004).
 
 ## Cuándo delegás directo vs. cuándo coordinás vos
 
@@ -46,9 +50,9 @@ Presales / Discovery ──────► Build / Implementación ────�
 
 ## Handoffs entre fases
 
-- **Presales → Build**: `presales-analyst` cierra con un Solution Design Document preliminar
-  (alcance, licenciamiento, estimación). Al pasar a `dataverse-builder`, ese documento es
-  input de contexto — no se repite el trabajo de discovery.
+- **Sprint 0 → Build**: `sprint0-analyst` cierra con requerimientos consolidados y mapeados
+  contra el BPC. Al pasar a `dataverse-builder`, ese análisis es input de contexto — no se
+  repite el trabajo de Sprint 0.
 - **Build → Delivery**: una vez que `dataverse-builder` tiene componentes creados y una
   solución versionada, `delivery-manager` toma el seguimiento operativo día a día (sprints,
   tasks) — no rediseña nada de lo que ya se construyó.
@@ -67,13 +71,14 @@ Presales / Discovery ──────► Build / Implementación ────�
 ## Prerequisitos de instalación
 
 Este supraagente depende de que estén instalados:
-- El plugin **Axxon Dataverse Architect** (para `dataverse-builder`) — declarado como
-  dependencia en `plugin.json`.
-- Las skills `d365-requirements-analyst`, `bpc-analyser`, `licensing-analyser`, `rfp-manager`,
-  `d365crm-resoruces-estimator` (para `presales-analyst`) y `ado-daily-prep`, `ado-us-planner`
-  (para `delivery-manager`) — **hoy no están empaquetadas como plugin**, así que solo están
-  disponibles en el entorno donde ya existen localmente. Ver ADR-004 para el plan de
-  empaquetarlas.
+- El plugin **Axxon Dataverse Architect** (para `dataverse-builder`).
+- El plugin **Axxon Sprint0 Suite** (`d365-requirements-analyst`, `bpc-analyser` — para
+  `sprint0-analyst`).
+- El plugin **Axxon Delivery Suite** (`ado-daily-prep`, `ado-us-planner` — para
+  `delivery-manager`).
+
+Los tres ya están empaquetados y declarados como `dependencies` en `plugin.json` — a
+diferencia de la v0.1.0 inicial, ya no dependen de skills sueltas sin empaquetar.
 
 ## Restricciones
 

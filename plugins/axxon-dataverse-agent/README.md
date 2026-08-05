@@ -5,8 +5,7 @@ Coordina tres subagentes especializados a lo largo del ciclo de vida completo de
 ver `docs/ADR-004-supra-agent-architecture.md` en la raíz del repo para el razonamiento
 arquitectónico completo.
 
-**Estado: v0.1.0 — funcional en el entorno del arquitecto que lo construyó, portabilidad
-parcial para el resto del equipo (ver "Estado de portabilidad" abajo).**
+**Estado: v0.2.0 — los 3 subagentes son portables al equipo (ver "Estado de portabilidad" abajo).**
 
 ---
 
@@ -17,7 +16,7 @@ axxon-dataverse-agent/
 ├── .claude-plugin/
 │   └── plugin.json              ← manifiesto, declara dependencia de axxon-dataverse-architect
 ├── agents/
-│   ├── presales-analyst.md      ← RFP, BPC, licensing, estimación
+│   ├── sprint0-analyst.md      ← requerimientos, BPC
 │   ├── dataverse-builder.md     ← delega en la skill dataverse-architect
 │   └── delivery-manager.md      ← daily prep, planificación de tasks
 └── skills/
@@ -29,7 +28,7 @@ axxon-dataverse-agent/
 
 | Subagente | Fase | Skills que carga |
 |---|---|---|
-| `presales-analyst` | Presales / Discovery | `d365-requirements-analyst`, `bpc-analyser`, `licensing-analyser`, `rfp-manager`, `d365crm-resoruces-estimator` |
+| `sprint0-analyst` | Sprint 0 | `d365-requirements-analyst`, `bpc-analyser` |
 | `dataverse-builder` | Build / Implementación | `dataverse-architect` (del plugin Axxon Dataverse Architect) |
 | `delivery-manager` | Delivery / Gobierno ALM | `ado-daily-prep`, `ado-us-planner` |
 
@@ -37,21 +36,19 @@ axxon-dataverse-agent/
 
 | Subagente | ¿Portable al equipo hoy? |
 |---|---|
-| `dataverse-builder` | **Sí** — depende de `axxon-dataverse-architect`, que ya es un plugin real y versionado (RC1) |
-| `presales-analyst` | **No** — depende de 5 skills que hoy son sueltas, no empaquetadas |
-| `delivery-manager` | **No** — depende de 2 skills sueltas + `ado-connector` como librería interna |
+| `dataverse-builder` | **Sí** — depende de `axxon-dataverse-architect`, plugin real y versionado (RC1) |
+| `sprint0-analyst` | **Sí** — depende de `axxon-sprint0-suite`, plugin real (v0.1.0) |
+| `delivery-manager` | **Sí** — depende de `axxon-delivery-suite`, plugin real (v0.1.0) — con la salvedad de que ambas skills tienen lógica de conexión a ADO duplicada en vez de compartida (`ado-connector` pendiente, no bloqueante) |
 
-Para que los otros dos subagentes funcionen en la máquina de otro consultor, esas skills
-necesitan empaquetarse como plugins propios primero (ver "Pendiente" en el ADR-004). Hasta
-entonces, este plugin funciona completo solo en el entorno donde esas skills ya están
-instaladas localmente.
+Los 3 subagentes quedaron portables en v0.2.0 — instalar `axxon-dataverse-agent` alcanza,
+siempre que Cowork resuelva también sus 3 dependencias declaradas en `plugin.json`.
 
 ## Uso
 
 Los subagentes se invocan automáticamente según relevancia, o explícitamente con @-mención:
 
 ```
-@axxon-dataverse-agent:presales-analyst analizame este RFP
+@axxon-dataverse-agent:sprint0-analyst analizame este RFP
 @axxon-dataverse-agent:dataverse-builder creá la tabla de solicitudes de crédito
 @axxon-dataverse-agent:delivery-manager preparame la daily de hoy
 ```

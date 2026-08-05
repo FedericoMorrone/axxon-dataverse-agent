@@ -6,9 +6,9 @@ mecanismo nativo de **Subagents** de Claude Code/Cowork.
 
 Ver `docs/ADR-004-supra-agent-architecture.md` para la decisión arquitectónica completa
 (por qué Subagents y no Agent Teams, cómo se agruparon las fases, y la limitación real de
-portabilidad de dos de los tres subagentes).
+ahora los 3 subagentes son portables — ver v0.2.0).
 
-**Estado actual: v0.1.0** (no es RC1 — quedan dependencias pendientes de empaquetar, ver ADR-004).
+**Estado actual: v0.2.0** (los 3 subagentes son portables; ver ADR-004 para lo que sigue pendiente — no bloqueante).
 
 ---
 
@@ -45,6 +45,5 @@ contiene ni lo reemplaza. `dataverse-builder` simplemente delega en la skill
 /plugin install axxon-dataverse-agent@axxon-dataverse-agent-marketplace
 ```
 
-Requiere tener también instalado `axxon-dataverse-architect` para que `dataverse-builder`
-funcione, y las skills de presales/delivery instaladas localmente para esos dos subagentes
-(ver limitación de portabilidad en el README del plugin).
+Requiere tener también instalados `axxon-dataverse-architect`, `axxon-sprint0-suite`, y
+`axxon-delivery-suite` — los tres quedan declarados como `dependencies` en `plugin.json`.
