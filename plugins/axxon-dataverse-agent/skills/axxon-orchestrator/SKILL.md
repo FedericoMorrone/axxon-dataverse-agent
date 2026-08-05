@@ -29,11 +29,16 @@ Sprint 0 ───────────────────► Build / Im
                                    ALM vía Azure DevOps)
 ```
 
-| Subagente | Fase | Cuándo invocarlo |
-|---|---|---|
-| `sprint0-analyst` | Sprint 0 | RFP, notas de reunión, transcripciones, requerimientos, mapeo contra el BPC |
-| `dataverse-builder` | Build / Implementación | Tablas, forms, business rules, vistas, seguridad, promoción de solución |
-| `delivery-manager` | Delivery / Gobierno ALM | Daily, standup, sprint, desglose de User Stories en tasks |
+| Subagente | Fase interna Axxon | Fase Success by Design (Microsoft) | Cuándo invocarlo |
+|---|---|---|---|
+| `sprint0-analyst` | Sprint 0 | **Plan** | RFP, notas de reunión, transcripciones, requerimientos, mapeo contra el BPC |
+| `dataverse-builder` | Build / Implementación | **Implement** | Tablas, forms, business rules, vistas, seguridad, promoción de solución |
+| `delivery-manager` | Delivery / Gobierno ALM | **Implement** (gobierno del sprint, en paralelo a `dataverse-builder`) | Daily, standup, sprint, desglose de User Stories en tasks |
+
+> **Cobertura de Success by Design:** `Strategize` y `Operate` no tienen subagente propio
+> todavía (gaps documentados en ADR-004). `Deploy` está cubierta solo parcialmente por
+> `solution-packager` (dentro de `dataverse-architect`), que gestiona el pack/check/import a
+> TEST/PROD vía pipeline, pero no hay un subagente dedicado a cutover/hypercare.
 
 > Licenciamiento, respuesta formal a RFP, y estimación de esfuerzo quedan explícitamente fuera
 > del alcance de `sprint0-analyst` — no forman parte de Sprint 0 en la metodología de Axxon, y

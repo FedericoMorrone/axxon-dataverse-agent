@@ -8,7 +8,8 @@ Ver `docs/ADR-004-supra-agent-architecture.md` para la decisión arquitectónica
 (por qué Subagents y no Agent Teams, cómo se agruparon las fases, y la limitación real de
 ahora los 3 subagentes son portables — ver v0.2.0).
 
-**Estado actual: v0.2.0** (los 3 subagentes son portables; ver ADR-004 para lo que sigue pendiente — no bloqueante).
+**Estado actual: v0.3.0** (los 3 subagentes son portables y ya están mapeados contra Success
+by Design de Microsoft; ver ADR-004 para los gaps de fase pendientes — no bloqueante).
 
 ---
 
@@ -22,7 +23,7 @@ axxon-dataverse-agent/
 │   └── axxon-dataverse-agent/
 │       ├── .claude-plugin/plugin.json
 │       ├── agents/
-│       │   ├── presales-analyst.md
+│       │   ├── sprint0-analyst.md
 │       │   ├── dataverse-builder.md
 │       │   └── delivery-manager.md
 │       ├── skills/axxon-orchestrator/SKILL.md

@@ -70,7 +70,31 @@ Quedan fuera de este agrupamiento:
   ninguna fase de proyecto. Se deja disponible como skill suelta para el propio supraagente,
   no como subagente de dominio.
 
-## Decisión 3 — Mecanismo técnico: `skills:` en el frontmatter del agent
+## Decisión 2b — Mapeo formal contra Success by Design de Microsoft
+
+La agrupación por fase de la Decisión 2 (Sprint 0 / Build / Delivery) era informal — nombres
+propios de Axxon sin anclaje a un marco reconocido. Se decidió mapear explícitamente cada
+subagente contra **Success by Design**, la metodología oficial de Microsoft para
+implementaciones Dynamics 365 (Strategize → Plan → Implement → Deploy → Operate) — ya
+referenciada dentro del propio contenido de `bpc-analyser`. Se descartó mapear contra las
+6 fases del Claude Project de Neural Cortex (Setup → Ideation → Functional Design → Technical
+Architecture → Prototyping → Validation) porque esas fases son para **diseñar un agente
+nuevo**, no para el ciclo de vida de una implementación D365 ya en curso — marco equivocado
+para este propósito.
+
+| Fase (Success by Design) | Subagente | Cobertura |
+|---|---|---|
+| Strategize | — | Sin subagente — gap conocido, no cubierto todavía |
+| Plan | `sprint0-analyst` | Completa — requerimientos + BPC es exactamente el entregable de Plan |
+| Implement | `dataverse-builder`, `delivery-manager` | Build (`dataverse-builder`) + gobierno diario de sprint (`delivery-manager`) — dos subagentes conviven en la misma fase, con responsabilidades distintas dentro de ella |
+| Deploy | — | Parcial — `solution-packager` (dentro de `dataverse-architect`) ya cubre pack/check/import a TEST/PROD vía pipeline, pero no hay subagente propio para gestionar la fase de Deploy (cutover, hypercare) |
+| Operate | — | Sin subagente — gap conocido, no cubierto todavía |
+
+**Nota:** dos fases (Strategize, Operate) quedan sin cobertura y una (Deploy) queda cubierta
+solo parcialmente por una skill que vive dentro de otro subagente. Esto se documenta
+explícitamente como gap, no se fuerza un mapeo 1:1 artificial solo para completar la tabla.
+
+
 
 Un subagente (`agents/*.md`) puede declarar `skills:` con una lista de nombres de skill, y
 Claude Code inyecta el contenido completo de cada una en el contexto del subagente al
@@ -101,6 +125,13 @@ sección ya no aplica.
 
 ## Pendiente para las próximas iteraciones
 
+- Definir/construir un subagente para **Strategize** (business case, engagement inicial) —
+  hoy sin cobertura. Nota: probablemente se solape con `licensing-analyser`/`rfp-manager`
+  (ver ítem de abajo), ya que Strategize es previo a Sprint 0 en la práctica de Axxon.
+- Definir/construir un subagente para **Operate** (soporte post go-live, mejora continua) —
+  hoy sin cobertura, no existe ninguna skill de Axxon para esto todavía.
+- Evaluar si **Deploy** necesita un subagente propio (cutover, hypercare) o si alcanza con
+  que `dataverse-builder`/`solution-packager` la cubran como ya lo hacen parcialmente.
 - Empaquetar `licensing-analyser`, `rfp-manager`, `d365crm-resoruces-estimator` como plugin
   propio (etapa de presales anterior a Sprint 0) si en algún momento se retoma esa etapa como
   parte del supraagente — hoy queda deliberadamente fuera.

@@ -1,7 +1,8 @@
 ---
 name: sprint0-analyst
 description: >
-  Subagente para la fase de Sprint 0 de un proyecto Dynamics 365 / Power Platform: análisis de
+  Subagente de la fase Plan (Success by Design de Microsoft) para un proyecto Dynamics 365 /
+  Power Platform: análisis de
   requerimientos a partir de RFP/notas/transcripciones, y mapeo contra el Business Process
   Catalog de Microsoft. Invocar cuando el usuario provea un RFP, notas de reunión, o
   transcripción y necesite consolidar/validar requerimientos, o pregunte por el encuadre de un
@@ -16,6 +17,8 @@ skills:
 ---
 
 # Sprint0 Analyst — subagente de Axxon Dataverse Agent
+
+**Fase Success by Design (Microsoft):** Plan.
 
 Sos el subagente de **Sprint 0** dentro del supraagente Axxon Dataverse Agent. Cubrís
 específicamente el trabajo de análisis de requerimientos y encuadre contra el Business

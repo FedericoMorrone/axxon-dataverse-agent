@@ -32,3 +32,13 @@ patrón jerárquico buscado).
 - `plugin.json` ahora declara `axxon-dataverse-architect`, `axxon-sprint0-suite`, y
   `axxon-delivery-suite` como `dependencies` reales.
 - Los 3 subagentes son portables al equipo — resuelta la limitación documentada en v0.1.0.
+
+## v0.3.0 (2026-08-05)
+
+- Mapeados los 3 subagentes contra Success by Design de Microsoft (Strategize/Plan/Implement/
+  Deploy/Operate): sprint0-analyst → Plan, dataverse-builder → Implement, delivery-manager →
+  Implement (gobierno de sprint, en paralelo).
+- Documentados como gaps explícitos: Strategize y Operate sin subagente; Deploy cubierta solo
+  parcialmente por solution-packager.
+- Corregidas referencias residuales a "presales-analyst" que habían quedado sin actualizar en
+  dataverse-builder.md, delivery-manager.md, y README.md tras el rename de v0.2.0.
