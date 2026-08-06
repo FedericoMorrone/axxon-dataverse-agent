@@ -115,6 +115,38 @@ para el historial de acciones generaría condiciones de carrera (el último en g
 los demás). Separar por fase elimina ese riesgo sin necesitar ningún mecanismo de lock — cada
 archivo tiene un solo escritor natural (la conversación de esa fase).
 
+## Decisión 2d — Redefinición de Fase 0: de "preventa" a "handoff Ventas → Operaciones"
+
+La Decisión 2c asumía que Fase 0 (Strategize) cubría licenciamiento, RFP, y estimación
+comercial — trabajo de preventa, antes de que el cliente apruebe la propuesta. El arquitecto
+redefinió el alcance: **Fase 0 arranca *después* de que la propuesta ya está aprobada**, y
+consiste en generar el **Kickoff Brief** — el documento de transición formal Ventas →
+Operaciones (Objetivo, Alcance, Estrategia de Implementación, Roles y responsabilidades, y un
+backlog inicial mapeado al BPC a nivel macro con peso en puntos Fibonacci).
+
+**Consecuencia:** `licensing-analyser`, `rfp-manager`, y `d365crm-resoruces-estimator` —que
+Decisión 2c asumía como el contenido de Fase 0— **quedan fuera del alcance de Axxon Dataverse
+Agent por completo**, no reubicadas a otra fase. Son preventa pura, anterior incluso a Fase 0
+tal como quedó definida. Si en el futuro se necesitan, es una skill/plugin completamente
+independiente de este supraagente.
+
+El nombre `strategize-analyst`/`axxon-strategize-suite` se mantiene por decisión del
+arquitecto, aunque ya no mapea literalmente al "Strategize" de Success by Design (que es
+pre-contrato) — más cerca es del arranque de Plan. Se documenta la discrepancia en vez de
+forzar un nombre que no refleje el contenido real.
+
+**Nueva skill:** `kickoff-brief` (dentro de `axxon-strategize-suite`), diseñada desde cero en
+conversación con el arquitecto — no convertida de un archivo preexistente, a diferencia de
+Sprint0/Delivery Suite. Se entrega siempre como `.pptx`, usando el template de marca oficial
+Axxon 2025 (bundleado como asset de la skill, recortado a los 10 slides necesarios y con el
+video de fondo de portada reemplazado por su imagen de poster estática — 79MB → 5.1MB).
+
+> **Actualización (v0.3.0 de `axxon-strategize-suite`):** la granularidad de `backlog-seeder`
+> se revisó de "1 Story placeholder genérica por Épica" a **"2-3 Stories candidatas por
+> Épica"**, derivadas de descomponer el campo Enfoque del backlog. Se mantiene el principio de
+> fondo (nada de criterios de aceptación ni trazabilidad a fuente — eso sigue siendo
+> exclusivo de Fase 1) pero se ganó utilidad práctica sin cruzar esa línea.
+
 ## Decisión 3 — Mecanismo técnico: `skills:` en el frontmatter del agent
 
 Un subagente (`agents/*.md`) puede declarar `skills:` con una lista de nombres de skill, y
@@ -146,13 +178,14 @@ sección ya no aplica.
 
 ## Pendiente para las próximas iteraciones
 
-- Empaquetar `licensing-analyser`, `rfp-manager`, `d365crm-resoruces-estimator` como el plugin
-  `axxon-strategize-suite` para poder construir el subagente `strategize-analyst` (Fase 0) —
-  bloqueado hasta que se suban esas 3 carpetas (mismo proceso que `axxon-sprint0-suite`).
+- **Fase 0 (Strategize/Kickoff) — resuelto**: `kickoff-brief` existe, `strategize-analyst` ya
+  no es un stub. `licensing-analyser`/`rfp-manager`/`d365crm-resoruces-estimator` quedan fuera
+  del alcance de este supraagente de forma permanente (Decisión 2d), no son un pendiente.
 - **Fase 3 (Deploy) — resuelto**: `deploy-manager` ya existe, reutilizando `dataverse-architect`
   sin contenido nuevo.
 - **Fase 4 (Operate)** — decisión explícita de no agentizar por ahora, no es un gap a cerrar.
-- Empaquetar `ado-connector` como módulo compartido real entre `ado-daily-prep` y
-  `ado-us-planner` (hoy cada una tiene su propia implementación duplicada) — refactor, no
-  bloqueante.
+- **`ado-connector` — resuelto**: construido como repo canónico `axxon-ado-connector`,
+  vendorizado en `ado-daily-prep`, `ado-us-planner`, y `backlog-seeder` (los 3 consumidores
+  actuales). Ver el README de ese repo para el criterio de "vendorizar, no referenciar entre
+  plugins" y la lista de consumidores a actualizar si cambia el cliente.
 - Resolver el rework de `output-formatter` (pendiente de otro proyecto) antes de sumarlo acá.

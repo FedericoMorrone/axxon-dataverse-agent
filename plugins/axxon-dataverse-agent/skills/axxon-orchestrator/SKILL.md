@@ -37,13 +37,19 @@ RFP, estim.)    BPC)            Dataverse + ALM
 
 | Subagente | Fase (Axxon / Success by Design) | Cuándo invocarlo |
 |---|---|---|
-| `strategize-analyst` | Fase 0 · Strategize | Licenciamiento, respuesta formal a RFP, estimación de esfuerzo/recursos antes de que el proyecto tenga Sprint 0 |
+| `strategize-analyst` | Fase 0 · Strategize (nombre heredado, no literal — ver nota abajo) | Generar el Kickoff Brief a partir de una propuesta aprobada — transición Ventas → Operaciones, previa a Sprint 0 |
 | `sprint0-analyst` | Fase 1 · Plan | RFP, notas de reunión, transcripciones, requerimientos, mapeo contra el BPC |
 | `dataverse-builder` | Fase 2 · Implement | Tablas, forms, business rules, vistas, seguridad, versionado de la solución |
 | `delivery-manager` | Fase 2 · Implement (en paralelo) | Daily, standup, sprint, desglose de User Stories en tasks |
 | `deploy-manager` | Fase 3 · Deploy | Preparar promoción a TEST/PROD, deployment checklist, seguimiento de cutover/hypercare |
 
 > **Fase 4 (Operate)** no está agentizada — decisión explícita, no un olvido (ver ADR-004).
+
+> **Fase 0** no es "Strategize" en el sentido literal de Microsoft (business case pre-contrato)
+> — es la transición Ventas → Operaciones, ya con la propuesta aprobada. El nombre se mantuvo
+> por decisión del arquitecto. RFP, licenciamiento, y estimación comercial (lo que sí sería
+> Strategize en sentido estricto) quedan explícitamente fuera del alcance de este supraagente
+> — son preventa (ver ADR-004).
 
 ---
 
@@ -125,8 +131,10 @@ la fase activa de la conversación actual por eso.
 
 ## Handoffs entre fases
 
-- **Strategize → Plan**: `strategize-analyst` cierra con licenciamiento resuelto y una
-  propuesta/estimación aceptada. `sprint0-analyst` la toma como contexto, no la repite.
+- **Strategize → Plan**: `strategize-analyst` cierra con el Kickoff Brief aceptado (documento
+  de transición Ventas → Operaciones). `sprint0-analyst` lo toma como contexto de entrada, no
+  repite el trabajo — nota: RFP/licenciamiento/estimación comercial NO forman parte de esta
+  fase, son preventa fuera del alcance de este supraagente (ver ADR-004).
 - **Plan → Implement**: `sprint0-analyst` cierra con requerimientos consolidados y mapeados
   contra el BPC. `dataverse-builder`/`delivery-manager` los toman como input.
 - **Implement → Deploy**: cuando `dataverse-builder` tiene la solución versionada y lista,
@@ -146,8 +154,7 @@ la fase activa de la conversación actual por eso.
 
 Este supraagente depende de que estén instalados:
 - El plugin **Axxon Dataverse Architect** (para `dataverse-builder` y `deploy-manager`).
-- El plugin **Axxon Strategize Suite** (`licensing-analyser`, `rfp-manager`,
-  `d365crm-resoruces-estimator` — para `strategize-analyst`).
+- El plugin **Axxon Strategize Suite** (`kickoff-brief` — para `strategize-analyst`).
 - El plugin **Axxon Sprint0 Suite** (`d365-requirements-analyst`, `bpc-analyser` — para
   `sprint0-analyst`).
 - El plugin **Axxon Delivery Suite** (`ado-daily-prep`, `ado-us-planner` — para
