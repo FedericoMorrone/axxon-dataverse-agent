@@ -147,6 +147,63 @@ video de fondo de portada reemplazado por su imagen de poster estática — 79MB
 > fondo (nada de criterios de aceptación ni trazabilidad a fuente — eso sigue siendo
 > exclusivo de Fase 1) pero se ganó utilidad práctica sin cruzar esa línea.
 
+## Decisión 2e — `refinement-prep`: preparación de sesión, separada del análisis posterior
+
+Al diseñar la dinámica de Fase 1 (Sprint 0), se identificó que `d365-requirements-analyst`
+cubre el análisis **posterior** a una sesión de refinamiento (trabaja con notas/transcripciones
+ya generadas), pero no existía nada que preparara la sesión **antes** de que ocurra. Se agregó
+la skill `refinement-prep` (dentro de `axxon-sprint0-suite`) con un principio de diseño
+estricto: genera hipótesis de fit-gap y preguntas, **nunca afirma cómo trabaja el cliente** —
+eso es exactamente lo que la sesión existe para descubrir.
+
+`refinement-prep` lee el estado real de la Épica en Azure DevOps (no la tabla estática del
+Kickoff Brief, que puede haber quedado desactualizada) — 4to consumidor de
+`axxon-ado-connector`, en modo estrictamente solo lectura.
+
+**Pendiente identificado, no resuelto todavía:** el cierre de Fase 1 debería producir un
+**Blueprint general de la solución** (agregando el resultado de todas las sesiones de
+refinamiento) — no existe una skill para esto todavía. Ver "Pendiente" más abajo.
+
+## Decisión 2f — Fusión de skills y `fdd-builder`
+
+Se subieron dos skills externas para revisar: `armado-de-fdd` (ya real, con plantilla Word de
+un proyecto Axxon anterior) y `analisis-funcional-dynamics365` (descomposición de
+requerimientos en Historias + Gherkin AC). Se decidió:
+
+- **Fusionar** `analisis-funcional-dynamics365` dentro de `d365-requirements-analyst` (nuevo
+  Paso 7) en vez de mantenerlas separadas — sus triggers se superponían lo suficiente como
+  para que Cowork pudiera activar la que no correspondía.
+- **Renombrar** `armado-de-fdd` a `fdd-builder` — era la única skill de las 21 del ecosistema
+  con nombre en español; se corrigió para mantener la convención (identificadores técnicos en
+  inglés, contenido/instrucciones en español).
+- **Neutralizar** la plantilla Word: traía datos de un proyecto real (cliente "Chacomer", GAP
+  de integración Asterisk) baked-in en los text boxes de portada — se reemplazaron por
+  placeholders genéricos (`Cliente X`, `[ID]`, `[Nombre del GAP]`, etc.), probado con un
+  smoke test end-to-end real (generación + render a PDF + inspección visual).
+- **FDD y Blueprint general son documentos independientes**, confirmado explícitamente — el
+  FDD detalla un GAP puntual, el Blueprint (todavía pendiente) resume el proyecto completo.
+  No hay relación de suma automática entre ambos.
+
+## Decisión 2g — Ciclo de recalibración de esfuerzo (Fase 0 vs. Fase 1)
+
+Se identificó que comparar la estimación de Fase 0 contra la real de Fase 1 requería dos
+números que hoy no eran consultables: el peso original (se perdía al refinar las Stories
+candidatas) y el total real de Fase 1 (nada escribía las Historias reales en Azure DevOps).
+Se resolvió con 4 piezas, en orden de dependencia:
+
+1. Fix a `backlog-seeder`: guarda el peso original como tag `fase0-peso-{n}` en la Épica.
+2. `backlog-refiner`: escribe las Historias reales en ADO (reemplazando candidatas, que
+   quedan en estado `Removed`, nunca borradas), con story points **confirmados por el
+   equipo** — la skill nunca inventa un número, es un error de validación si falta.
+3. `fit-gap-rollup`: agrega la clasificación fit/gap ya registrada, sin volver a clasificar.
+4. `effort-recalibration`: compara (1) contra la suma de (2), agregado de **todo el
+   proyecto** (no por Épica — se corre una vez, al cierre de Fase 1).
+
+`backlog-refiner` es la única skill de solo-lectura-por-defecto del ecosistema que además
+escribe — 5to, 6to y 7mo consumidor de `axxon-ado-connector` (`refinement-prep`,
+`backlog-refiner`, `fit-gap-rollup`, `effort-recalibration`, todas dentro de
+`axxon-sprint0-suite`).
+
 ## Decisión 3 — Mecanismo técnico: `skills:` en el frontmatter del agent
 
 Un subagente (`agents/*.md`) puede declarar `skills:` con una lista de nombres de skill, y
@@ -178,14 +235,20 @@ sección ya no aplica.
 
 ## Pendiente para las próximas iteraciones
 
+- **Blueprint general de la solución (cierre de Fase 1)** — agregaría FDDs, el rollup fit/gap,
+  y la recalibración de esfuerzo en un documento único. Ya existen las 3 piezas de insumo
+  (`fdd-builder`, `fit-gap-rollup`, `effort-recalibration`); falta la skill que las combine.
+  Es el próximo bloque de diseño pendiente dentro de Sprint 0.
+
 - **Fase 0 (Strategize/Kickoff) — resuelto**: `kickoff-brief` existe, `strategize-analyst` ya
   no es un stub. `licensing-analyser`/`rfp-manager`/`d365crm-resoruces-estimator` quedan fuera
   del alcance de este supraagente de forma permanente (Decisión 2d), no son un pendiente.
 - **Fase 3 (Deploy) — resuelto**: `deploy-manager` ya existe, reutilizando `dataverse-architect`
   sin contenido nuevo.
 - **Fase 4 (Operate)** — decisión explícita de no agentizar por ahora, no es un gap a cerrar.
-- **`ado-connector` — resuelto**: construido como repo canónico `axxon-ado-connector`,
-  vendorizado en `ado-daily-prep`, `ado-us-planner`, y `backlog-seeder` (los 3 consumidores
-  actuales). Ver el README de ese repo para el criterio de "vendorizar, no referenciar entre
+- **`ado-connector` — resuelto**: construido como repo canónico `axxon-ado-connector`, ya con
+  **7 consumidores** (`ado-daily-prep`, `ado-us-planner`, `backlog-seeder`, `refinement-prep`,
+  `backlog-refiner`, `fit-gap-rollup`, `effort-recalibration`). Ver el README de ese repo para
+  el criterio de "vendorizar, no referenciar entre
   plugins" y la lista de consumidores a actualizar si cambia el cliente.
 - Resolver el rework de `output-formatter` (pendiente de otro proyecto) antes de sumarlo acá.

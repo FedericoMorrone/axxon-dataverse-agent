@@ -56,3 +56,13 @@ patrón jerárquico buscado).
 - Modelo de sesión reemplazado: de un `.d365-session.md` único a `.d365-project.md` (estático,
   compartido) + `.d365-fases/fase-N-nombre.md` (un log de acciones por fase, evita condiciones
   de carrera entre fases trabajadas en paralelo).
+
+## v0.6.0 (2026-08-07)
+
+- sprint0-analyst now loads 7 skills (up from 4): added fdd-builder, backlog-refiner,
+  fit-gap-rollup, effort-recalibration. Documented the natural sequence within an Epic and
+  explicitly distinguished "estimación comercial" (out of scope, presales) from "recalibración
+  de esfuerzo técnica" (in scope, Fase 1 close).
+- ADR-004: added Decision 2f (skill fusion + fdd-builder naming/neutralization) and Decision
+  2g (effort recalibration cycle design). Updated the Blueprint pending note to reflect that
+  its 3 input pieces (fdd-builder, fit-gap-rollup, effort-recalibration) now exist.
