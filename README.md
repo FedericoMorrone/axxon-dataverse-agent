@@ -49,3 +49,10 @@ Este repo **depende de** 4 plugins, cada uno en su propio repo:
 ```
 
 Requiere también instalados los 4 plugins de dependencia — declarados en `plugin.json`.
+
+## Prerequisito — servidor MCP de Azure DevOps (dejó de ser opcional, ver ADR-001)
+
+`backlog-seeder` ya requiere este servidor conectado (ya no usa HTTP directo) — el resto de
+las skills que tocan Azure DevOps se están migrando progresivamente. Ver
+[`docs/prerequisites-ado-mcp-server.md`](docs/prerequisites-ado-mcp-server.md) para las
+instrucciones exactas (opción remota sin instalación, o local vía `claude mcp add`).

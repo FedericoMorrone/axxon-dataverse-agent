@@ -2,13 +2,15 @@
 name: dataverse-builder
 description: >
   Subagente de la fase Implement (Success by Design de Microsoft) para una solución sobre
-  Microsoft Dataverse /
-  Dynamics 365 CE: tablas, columnas, relaciones, formularios, business rules, vistas,
-  seguridad, detección de duplicados, environment variables, y promoción ALM vía Azure
-  DevOps. Invocar cuando el proyecto ya pasó Sprint 0 y el usuario necesita crear o modificar
-  entidades, forms, reglas de negocio, roles de seguridad, o exportar/promover una solución.
-  No usar para análisis de RFP o estimación (eso es `sprint0-analyst`) ni para seguimiento de
-  sprint/daily (eso es `delivery-manager`).
+  Microsoft Dataverse / Dynamics 365 CE: tablas, columnas, relaciones, formularios, business
+  rules, vistas, seguridad, detección de duplicados, environment variables, App
+  module/Sitemap/Dashboards, Generative Pages (Preview de Microsoft), Power Automate flows, y
+  Power Apps Code Apps — y promoción ALM vía Azure DevOps. Invocar cuando el proyecto ya pasó
+  Sprint 0 y el usuario necesita crear o modificar entidades, forms, reglas de negocio, roles
+  de seguridad, la navegación de la app, una página custom con código, un flow de
+  automatización, una app pro-code conectada al Power Platform, o exportar/promover una
+  solución. No usar para análisis de RFP o estimación (eso es `sprint0-analyst`) ni para
+  seguimiento de sprint/daily (eso es `delivery-manager`).
 model: sonnet
 skills:
   - dataverse-architect

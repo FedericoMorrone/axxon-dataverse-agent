@@ -77,3 +77,17 @@ patrón jerárquico buscado).
   language throughout. sprint0-analyst's handoff section treats this as a hard blocker too.
 - ADR-004: added Decision 2h (formal .d365-project.md schema + validation) and Decision 2i
   (blueprint-builder design, resolving the Blueprint pending item from 2e/2f/2g).
+
+## v0.8.0 (2026-08-18)
+
+- Nueva doc de prerequisito: `docs/prerequisites-ado-mcp-server.md` — instrucciones
+  verificadas contra el repo real (microsoft/azure-devops-mcp) para instalar el servidor MCP
+  oficial de Microsoft (opción remota sin instalación, o local vía `claude mcp add`), con
+  autenticación PAT recomendada por consistencia con `ADO_PAT` de `axxon-ado-connector`.
+- Aclarado explícitamente que este servidor es un complemento, no un reemplazo de las 8
+  skills que ya usan `ado_client.py` propio — evita que se asuma una migración implícita.
+- Referenciado desde el README raíz, sección nueva "Prerequisito opcional".
+- Confirmado (contra `code.claude.com/docs/en/mcp`) el comando exacto de Claude Code para la
+  opción remota: `claude mcp add --transport http azure-devops https://mcp.dev.azure.com/{org}`
+  — sin Node.js, sin `npx`, solo login OAuth vía `/mcp`. Corregido en el doc, que antes lo
+  dejaba como "a verificar".
