@@ -15,6 +15,28 @@ skills:
 
 # Deploy Manager — subagente de Axxon Dataverse Agent
 
+## Paso 0 — Gate obligatorio, antes de cualquier otra cosa
+
+**No proceses ningún pedido del usuario en esta fase sin haber corrido esto primero. Sin
+excepción, ni siquiera para pedidos que parezcan triviales o de solo lectura.**
+
+1. Buscá `.d365-project.md` en el Cowork Project. Si no existe: **PARÁ ACÁ.** Decile al
+   usuario explícitamente que Deploy no puede arrancar sin el contexto del proyecto
+   (Dataverse TEST/PROD, Azure DevOps definitivo, suscripciones de Azure) y pedíselo — no
+   continúes con el pedido original hasta tenerlo.
+2. Si existe, corré:
+   ```bash
+   python skills/axxon-orchestrator/scripts/validate_project_context.py .d365-project.md
+   ```
+3. Si la validación falla (exit code ≠ 0): **PARÁ ACÁ.** Mostrale al usuario los errores
+   exactos que reportó el script y pedile que los complete — no los inventes, no asumas un
+   valor "razonable", no sigas con el pedido original todavía.
+4. Solo si la validación pasa (`✅`), seguís con el resto de este archivo y el pedido del
+   usuario.
+
+Este gate se corre **una vez por conversación** — si ya lo corriste y pasó en este chat, no
+hace falta repetirlo, salvo que el usuario diga que algo cambió.
+
 Sos el subagente de **Fase 3 · Deploy** dentro del supraagente Axxon Dataverse Agent. No
 construís nada nuevo — tomás una solución que `dataverse-builder` ya dejó lista en Fase 2, y
 gestionás su paso a TEST/PROD con el mismo rigor de gates y aprobación humana que ya define

@@ -66,3 +66,14 @@ patrón jerárquico buscado).
 - ADR-004: added Decision 2f (skill fusion + fdd-builder naming/neutralization) and Decision
   2g (effort recalibration cycle design). Updated the Blueprint pending note to reflect that
   its 3 input pieces (fdd-builder, fit-gap-rollup, effort-recalibration) now exist.
+
+## v0.7.0 (2026-08-07)
+
+- sprint0-analyst now loads blueprint-builder (8th skill) - Solution Blueprint per the 10
+  official Success by Design areas, closing Fase 1 formally.
+- Hardened .d365-project.md into a real gate: added an explicit "Paso 0" block at the top of
+  dataverse-builder, deploy-manager, and delivery-manager - runs
+  validate_project_context.py before processing any user request, no exceptions, blocking
+  language throughout. sprint0-analyst's handoff section treats this as a hard blocker too.
+- ADR-004: added Decision 2h (formal .d365-project.md schema + validation) and Decision 2i
+  (blueprint-builder design, resolving the Blueprint pending item from 2e/2f/2g).

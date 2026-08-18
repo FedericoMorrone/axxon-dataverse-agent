@@ -88,15 +88,49 @@ otro. Cada fase con su propio archivo elimina ese riesgo — concurrencia segura
 
 ```markdown
 # Contexto del proyecto — {Nombre del proyecto}
-- Environment DEV: https://orgXXX-dev.crm2.dynamics.com
-- Solución: ClienteXCreditOnboarding
-- Publisher prefix: axx
-- Azure DevOps: Project `{cliente}` en la org `axxon`, repo `{repo}`
-- Última actualización: {fecha}
+
+## Dataverse
+- DEV: https://orgXXX-dev.crm2.dynamics.com
+- TEST: https://orgXXX-test.crm2.dynamics.com
+- PROD: https://orgXXX.crm2.dynamics.com
+
+## Azure DevOps (definitivo)
+- Organización: {org}
+- Project: {project}
+- Repo: {repo}
+
+## Azure — suscripciones
+- {propósito, ej. "MCP Server / integraciones"}: {subscription id o nombre} ({resource group si aplica})
+- (una línea por suscripción, si hay más de una con propósito distinto)
+
+## Publisher prefix
+- axx_
+
+## Solución Dataverse
+- {ej. ClienteXCreditOnboarding}
+
+- Última actualización: {fecha} · confirmado por: {quién}
 ```
 
-Se crea una sola vez, al primer pedido de cualquier fase. Todos los subagentes lo leen para
-contexto de environment/solución — ninguno lo pisa con logs de acciones.
+Se crea/confirma en el **handoff Fase 1 → Fase 2** — antes, durante Fase 0/1, es común
+trabajar contra un Project de Azure DevOps de prueba (como el usado en todas las
+simulaciones); Fase 2 construye contra Dataverse y ADO **reales**, así que este archivo tiene
+que reflejarlos antes de que `dataverse-builder` arranque.
+
+**Validación de formato obligatoria antes de dar el handoff por completo** — correr:
+
+```bash
+python skills/axxon-orchestrator/scripts/validate_project_context.py .d365-project.md
+```
+
+Valida que las URLs de Dataverse tengan forma de URL, que ningún campo esté vacío, y que el
+publisher prefix sea `axx_` (si no lo es, no lo corrijas solo — confirmá con el usuario si es
+intencional). **Esto valida formato, no que los datos sean correctos** — una URL bien formada
+puede seguir apuntando a un environment equivocado; eso lo confirma el usuario, no el script.
+
+Todos los subagentes de Fase 2 en adelante (`dataverse-builder`, `deploy-manager`,
+`delivery-manager`) leen este archivo primero — si no existe o la validación falla, paran y
+piden los datos en vez de asumir o improvisar.
 
 ### `.d365-fases/fase-N-nombre.md` — log de esa fase específica
 

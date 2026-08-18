@@ -204,6 +204,50 @@ escribe — 5to, 6to y 7mo consumidor de `axxon-ado-connector` (`refinement-prep
 `backlog-refiner`, `fit-gap-rollup`, `effort-recalibration`, todas dentro de
 `axxon-sprint0-suite`).
 
+## Decisión 2h — Schema formal de `.d365-project.md` + validación de formato
+
+`.d365-project.md` (el contexto estático definido en Decisión 2c) quedaba sin un schema
+formal — se completaba informalmente, sin garantía de que tuviera todo lo que Fase 2
+necesita. Se formalizaron 3 bloques obligatorios: **Dataverse** (URLs DEV/TEST/PROD),
+**Azure DevOps definitivo** (organización/Project/repo — puede diferir del usado durante
+Fase 0/1 para pruebas), y **Azure — suscripciones** (una por propósito, ej. hosting del MCP
+Server). Se agregó `axxon-orchestrator/scripts/validate_project_context.py`: valida formato
+(URLs bien formadas, campos no vacíos, publisher prefix = `axx_`) — **nunca valida que los
+datos sean correctos ni que existan de verdad**, esa distinción se documenta explícitamente
+para no generar falsa confianza.
+
+Se confirma/completa en el **handoff Fase 1 → Fase 2** (`sprint0-analyst` lo trata como
+blocker duro, no una instrucción más, antes de dar la fase por cerrada) y se hizo cumplir con
+un **Paso 0 explícito** al inicio de `dataverse-builder`, `deploy-manager`, y
+`delivery-manager` — corren la validación antes de procesar cualquier pedido del usuario en
+esa conversación, sin excepción, y paran si falla. `delivery-manager` solo exige la sección de
+Azure DevOps (no usa Dataverse/suscripciones). Es el guardrail más fuerte que se puede
+expresar en instrucciones de skill — no hay enforcement a nivel de código real, así que se
+compensa con lenguaje directivo explícito ("PARÁ ACÁ", "sin excepción") en vez de fraseo
+sugerido.
+
+## Decisión 2i — `blueprint-builder`: Solution Blueprint según las 10 áreas oficiales de SBD
+
+El Blueprint general quedó pendiente en varias decisiones anteriores (2e, 2f, 2g) — se
+resolvió anclándolo a la estructura **oficial** del Solution Blueprint Review de Microsoft
+Success by Design (confirmada contra
+learn.microsoft.com/dynamics365/guidance/fasttrack/solution-workshops, no una lista genérica
+de memoria): Program, Application, Data, Integration, Test, Business Process, Security, ALM,
+Environment & Capacity, e Intelligence strategy — 10 áreas fijas.
+
+Cruzando esas 10 áreas contra lo que el ecosistema ya produce, se encontró que 2 tienen fuente
+de datos estructurada y consultable (Business Process vía Azure DevOps + fit/gap de
+`backlog-refiner`; Environment & Capacity vía `.d365-project.md`) y las otras 8 no — se
+resolvió con un **enfoque mixto**: esas 2 se auto-completan por script, las demás las sintetiza
+Claude a partir de Kickoff Brief/FDDs/notas/transcripciones disponibles.
+
+Se introdujo un estado nuevo, `requiere-intervencion-humana`, distinto del `[Pendiente]`
+normal de `fdd-builder` — ahí el pendiente es esperable a nivel de detalle fino; acá, en el
+documento de cierre de fase, señala que Fase 1 no debería darse por cerrada sin resolverlo. La
+skill nunca genera el documento con un área vacía sin haber preguntado antes — es un protocolo
+explícito en el `SKILL.md`, no un chequeo automático (mismo tipo de guardrail "en
+instrucciones, no en código" que Decisión 2h).
+
 ## Decisión 3 — Mecanismo técnico: `skills:` en el frontmatter del agent
 
 Un subagente (`agents/*.md`) puede declarar `skills:` con una lista de nombres de skill, y
@@ -235,10 +279,16 @@ sección ya no aplica.
 
 ## Pendiente para las próximas iteraciones
 
-- **Blueprint general de la solución (cierre de Fase 1)** — agregaría FDDs, el rollup fit/gap,
-  y la recalibración de esfuerzo en un documento único. Ya existen las 3 piezas de insumo
-  (`fdd-builder`, `fit-gap-rollup`, `effort-recalibration`); falta la skill que las combine.
-  Es el próximo bloque de diseño pendiente dentro de Sprint 0.
+- **Documentación profesional de respaldo del desarrollo** — al finalizar el desarrollo total
+  del agente (las 5 fases + supraagente), generar documentación formal que respalde todo el
+  proceso de construcción (más allá de los ADRs y READMEs técnicos ya existentes).
+- **Validar contra un Azure DevOps real** — las skills que leen/escriben en ADO
+  (`refinement-prep`, `backlog-refiner`, `fit-gap-rollup`, `effort-recalibration`,
+  `blueprint-builder`, y las de `axxon-delivery-suite`) solo se probaron con datos simulados,
+  sin conexión real a un environment de Azure DevOps desde este entorno de desarrollo.
+
+- **Blueprint general de la solución — resuelto**: `blueprint-builder` ya existe (Decisión
+  2i), estructurado según las 10 áreas oficiales de Success by Design.
 
 - **Fase 0 (Strategize/Kickoff) — resuelto**: `kickoff-brief` existe, `strategize-analyst` ya
   no es un stub. `licensing-analyser`/`rfp-manager`/`d365crm-resoruces-estimator` quedan fuera
