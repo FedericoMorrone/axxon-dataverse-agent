@@ -10,9 +10,6 @@ description: >
   es `sprint0-analyst`) ni para construir componentes de Dataverse (eso es
   `dataverse-builder`).
 model: sonnet
-skills:
-  - ado-daily-prep
-  - ado-us-planner
 ---
 
 # Delivery Manager — subagente de Axxon Dataverse Agent

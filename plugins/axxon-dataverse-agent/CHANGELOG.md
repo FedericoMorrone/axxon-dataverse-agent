@@ -1,5 +1,28 @@
 # Changelog — Axxon Dataverse Agent
 
+## v0.8.1 (2026-08-21)
+
+- **Fix crítico de carga**: el plugin no cargaba ("couldn't be loaded") desde v0.1.0. Causa
+  raíz: `skills:` en el frontmatter de los 5 subagentes (`agents/*.md`) y `dependencies` en
+  `plugin.json` no son campos reales del schema de Claude Code — no existe mecanismo de
+  cross-linking de skills entre plugins ni de dependencias declarativas entre plugins.
+  Confirmado por comparación contra plugins oficiales (`claude-plugins-official`) y contra
+  `axxon-dataverse-architect`, ninguno de los cuales usa esos campos.
+- Eliminado `skills:` del frontmatter de `dataverse-builder`, `strategize-analyst`,
+  `sprint0-analyst`, `delivery-manager`, y `deploy-manager`. El texto en prosa de cada agente
+  ya indicaba qué skill invocar por nombre (p. ej. "Delegás la ejecución técnica a la skill
+  `dataverse-architect`") — eso se conserva como instrucción para que el subagente invoque la
+  skill vía la tool `Skill` en runtime, en vez de un scoping declarativo inexistente.
+- Eliminado `dependencies` de `plugin.json`. Los prerequisitos de instalación (que el usuario
+  tenga instalados `axxon-dataverse-architect`, `axxon-strategize-suite`,
+  `axxon-sprint0-suite`, `axxon-delivery-suite`) ya estaban documentados en prosa dentro de
+  cada `agents/*.md` ("Prerequisito de instalación") y en el README — se mantienen como la
+  única fuente de verdad, ahora que no hay campo declarativo que los reemplace.
+- **Retroactivo**: todo lo documentado como `skills:`/`dependencies` reales en v0.2.0–v0.8.0
+  nunca funcionó como mecanismo de carga — era metadata inerte que además rompía la
+  validación del plugin. Este fix no cambia el comportamiento pretendido de ningún subagente,
+  solo hace que el plugin cargue.
+
 ## v0.1.0 (2026-08-05)
 
 Primera versión. Define la arquitectura del supraagente (ver ADR-004): 3 subagentes por fase

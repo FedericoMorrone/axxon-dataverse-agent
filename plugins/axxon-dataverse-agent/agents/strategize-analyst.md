@@ -13,9 +13,6 @@ description: >
   comercial — eso es preventa, fuera del alcance de este supraagente. No usar para análisis
   detallado de requerimientos (eso es `sprint0-analyst`, Fase 1).
 model: sonnet
-skills:
-  - kickoff-brief
-  - backlog-seeder
 ---
 
 # Strategize Analyst — subagente de Axxon Dataverse Agent

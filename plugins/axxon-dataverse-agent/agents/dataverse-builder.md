@@ -12,8 +12,6 @@ description: >
   solución. No usar para análisis de RFP o estimación (eso es `sprint0-analyst`) ni para
   seguimiento de sprint/daily (eso es `delivery-manager`).
 model: sonnet
-skills:
-  - dataverse-architect
 ---
 
 # Dataverse Builder — subagente de Axxon Dataverse Agent

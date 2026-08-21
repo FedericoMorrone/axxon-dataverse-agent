@@ -13,15 +13,6 @@ description: >
   estimación comercial (ver ADR-004). No usar para construcción sobre Dataverse
   (`dataverse-builder`) ni sprint/daily (`delivery-manager`).
 model: sonnet
-skills:
-  - refinement-prep
-  - d365-requirements-analyst
-  - bpc-analyser
-  - fdd-builder
-  - backlog-refiner
-  - fit-gap-rollup
-  - effort-recalibration
-  - blueprint-builder
 ---
 
 # Sprint0 Analyst — subagente de Axxon Dataverse Agent

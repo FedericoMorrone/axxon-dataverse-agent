@@ -9,8 +9,6 @@ description: >
   construir componentes nuevos (eso es `dataverse-builder`, Fase 2) ni para gobierno diario de
   sprint (eso es `delivery-manager`).
 model: sonnet
-skills:
-  - dataverse-architect
 ---
 
 # Deploy Manager — subagente de Axxon Dataverse Agent
