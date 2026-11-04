@@ -205,6 +205,14 @@ def validate(data: dict) -> list[str]:
 
 
 def main() -> int:
+    # En consolas Windows (cp1252) los ✅/❌/⚠️ tiraban UnicodeEncodeError y el gate fallaba
+    # sin validar nada. Forzamos UTF-8 y, si la consola no lo soporta, reemplazo.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
     if len(sys.argv) != 2:
         print("Uso: python validate_project_context.py .d365-project.md", file=sys.stderr)
         return 1

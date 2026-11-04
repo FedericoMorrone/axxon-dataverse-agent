@@ -1,5 +1,16 @@
 # Changelog — Axxon Dataverse Agent
 
+## v0.13.1 (2026-11-04)
+
+- **Fix — `validate_project_context.py` se caía en consolas Windows:** los ✅/❌/⚠️ tiraban
+  `UnicodeEncodeError` con la codificación cp1252 antes de validar nada, y como es el gate
+  obligatorio de `dataverse-builder` y `deploy-manager`, podía bloquear esos subagentes. El
+  script ahora fuerza UTF-8 en stdout/stderr (con reemplazo si la consola no lo soporta).
+  Encontrado al ejecutar por primera vez los scripts con Python real.
+- Verificado ejecutando: el validador con un caso válido (modo solo DEV) y uno con 4 errores
+  (wiki, ruta, rol, proceso) devuelve exactamente lo esperado.
+- `.gitignore` agregado (`__pycache__/`, `*.pyc`, venvs).
+
 ## v0.13.0 (2026-11-04)
 
 Fixes de prioridad 2 del documento de hallazgos.
