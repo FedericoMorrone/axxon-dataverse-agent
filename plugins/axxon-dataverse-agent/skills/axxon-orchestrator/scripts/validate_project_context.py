@@ -53,6 +53,9 @@ def parse_project_context(text: str) -> dict:
         for field, label in [("organizacion", "Organización"), ("project", "Project"), ("repo", "Repo")]:
             m = re.search(rf"-\s*{label}:\s*(.+)", ado_section.group(1))
             data["ado"][field] = m.group(1).strip() if m else None
+        # Opcional — process template (contrato ADO §9). [ \t]* para no capturar la línea siguiente.
+        m = re.search(r"^[ \t]*-[ \t]*Proceso:[ \t]*(.*)$", ado_section.group(1), re.MULTILINE)
+        data["ado"]["proceso"] = m.group(1).strip() if m else None
 
     azure_section = re.search(r"## Azure — suscripciones\n(.*?)(?=\n## |\Z)", text, re.DOTALL)
     if azure_section:
@@ -89,6 +92,18 @@ def parse_project_context(text: str) -> dict:
 
 
 VALID_ROLES = {"funcional", "customizador", "dev", "tech lead", "pm"}
+VALID_PROCESSES = {"agile", "scrum", "basic", "cmmi"}
+
+
+def check_process(data: dict) -> tuple[list[str], list[str]]:
+    """Proceso de ADO (opcional): ausente → aviso; presente → tiene que ser uno de los 4."""
+    proceso = (data.get("ado") or {}).get("proceso")
+    if proceso is None or not proceso.strip():
+        return [], ["Azure DevOps — Proceso: ausente (opcional) — los agentes lo van a preguntar "
+                    "antes de escribir work items. Se ve en ADO → Project settings → Process."]
+    if proceso.strip().lower() not in VALID_PROCESSES:
+        return [f"Azure DevOps — Proceso: '{proceso}' no soportado (válidos: Agile, Scrum, Basic, CMMI)."], []
+    return [], []
 
 
 def check_team(data: dict) -> tuple[list[str], list[str]]:
@@ -191,6 +206,9 @@ def main() -> int:
     team_errors, team_warnings = check_team(data)
     errors += team_errors
     warnings += team_warnings
+    proc_errors, proc_warnings = check_process(data)
+    errors += proc_errors
+    warnings += proc_warnings
 
     for w in warnings:
         print(f"⚠️  {w}")

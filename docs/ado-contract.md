@@ -18,8 +18,11 @@ agrega acá primero.
   aparte.
 - **Historia técnica pura** (frameworks compartidos, pipelines, infra, refactor): User Story
   con tag `us-tecnica`, dueño el tech lead. Es la excepción, no la regla.
-- Funciona con cualquier process template (Agile, Scrum, Basic, custom): **los tags son la
-  señal principal**. Los nombres de estado se detectan del proyecto, nunca se asumen.
+- Funciona con cualquier process template (Agile, Scrum, Basic, CMMI): **los tags son la
+  señal principal**, y el tipo de requerimiento, el campo de esfuerzo y los estados salen del
+  mapeo de la §9 según el `Proceso` declarado en `.d365-project.md`. Nunca se asume Agile.
+- En este contrato, "User Story" / "US" significa **el requerimiento** del proceso (User
+  Story, Product Backlog Item, Issue o Requirement — §9).
 
 ## 2. Roles
 
@@ -72,12 +75,14 @@ nunca se edita para cambiar una decisión: se agrega uno nuevo.
   ConsultarBureau (Update axx_creditsolicitud, async)`.
 - **Asignación:** las `build-lowcode` se asignan al customizador al crearlas. Las
   `build-procode` se crean **sin asignar**: el dev las toma desde `ado-dev-queue`.
-- **Estimación:** `Microsoft.VSTS.Scheduling.OriginalEstimate` y `RemainingWork` (horas).
+- **Estimación:** `Microsoft.VSTS.Scheduling.RemainingWork` (horas) siempre; además
+  `OriginalEstimate` solo en Agile y CMMI (en Scrum y Basic la Task no lo tiene — §9).
 - **Dependencias:** link `predecessor`/`successor` entre Tasks (ej. `[LC] Crear tabla` →
   predecesora de `[PC] Plugin sobre la tabla`). Antes de empezar una Task, el agente verifica
   que sus predecesoras estén cerradas; si no, avisa y no arranca sin confirmación.
-- **Campo `Activity`:** ⏸️ **decisión abierta** (depende del process template de cada
-  proyecto). Hasta resolverla, los agentes **no** lo escriben; las colas y reportes usan tags.
+- **Campo `Activity`:** ⏸️ **decisión abierta**. Existe en Agile y Scrum; CMMI usa
+  `Discipline`; Basic no tiene ninguno (§9). Hasta resolverla, los agentes **no** lo
+  escriben; las colas y reportes usan tags.
 
 ## 6. Código y decisiones
 
@@ -97,8 +102,10 @@ nunca se edita para cambiar una decisión: se agrega uno nuevo.
 | Task pro-code → cerrada | Dev | PR mergeado + registro/deploy en DEV verificado |
 | US → resuelta (`Resolved`/`Done`) | Funcional | AC Gherkin validados en DEV y todas las Tasks cerradas |
 
-Los nombres exactos de estado se leen del proyecto (process template) — nunca se escriben a
-ciegas.
+Los nombres exactos de estado salen de la §9 según el proceso — nunca se escriben a ciegas.
+Para **filtrar** abiertos/cerrados en WIQL, `[System.State] NOT IN ('Closed', 'Done',
+'Removed', 'Resolved')` funciona con los cuatro procesos (los estados que no existen en un
+proceso simplemente no matchean).
 
 ## 8. Lo que ningún agente hace
 
@@ -107,3 +114,36 @@ ciegas.
 - Marcar `plan-aprobado` sin aprobación explícita (y del tech lead, si hay pro-code).
 - Borrar work items, tags ajenos o comentarios.
 - Pedir o guardar PATs: el acceso es vía el servidor MCP oficial de Azure DevOps.
+
+## 9. Process template (Agile, Scrum, Basic, CMMI)
+
+Se declara en `.d365-project.md` → `## Azure DevOps` → `- Proceso: {Agile | Scrum | Basic |
+CMMI}` (se ve en ADO → Project settings → Process). Si falta, el agente lo pregunta antes de
+**escribir** work items y sugiere agregarlo al archivo. Las **lecturas** no lo necesitan.
+
+| | Agile | Scrum | Basic | CMMI |
+|---|---|---|---|---|
+| **Tipo de requerimiento** | User Story | Product Backlog Item | Issue | Requirement |
+| **Campo de esfuerzo** | `Microsoft.VSTS.Scheduling.StoryPoints` | `Microsoft.VSTS.Scheduling.Effort` | `Microsoft.VSTS.Scheduling.Effort` ⚠️ | `Microsoft.VSTS.Scheduling.Size` |
+| **Estados del requerimiento** | New, Active, Resolved, Closed, Removed | New, Approved, Committed, Done, Removed | To Do, Doing, Done | Proposed, Active, Resolved, Closed |
+| **"En curso" del requerimiento** | Active | Committed | Doing | Active |
+| **"Resuelto" del requerimiento** | Resolved | Done | Done | Resolved |
+| **Retirar sin borrar** | Removed | Removed | (no hay) → tag `reemplazada-fase1` + comentario | Closed |
+| **Estimación de la Task** | Original Estimate, Remaining Work, Completed Work | Remaining Work | Remaining Work | Original Estimate, Remaining Work, Completed Work |
+| **Disciplina de la Task** | `Activity` | `Activity` | — | `Discipline` |
+
+**Reglas:**
+- **Consultas:** usar `[System.WorkItemType] IN GROUP 'Microsoft.RequirementCategory'` en vez
+  del nombre del tipo — funciona con cualquier proceso, incluso customizado.
+- **Lectura de esfuerzo:** el primero con valor entre StoryPoints, Effort y Size.
+- **Estados de la Task:** no se escriben de memoria; se toman del proyecto (leyendo una Task
+  existente) o se preguntan una vez.
+- **Procesos heredados customizados:** el mapeo vale para el proceso base; si el proyecto
+  renombró tipos o estados, el agente lo detecta al primer error y pregunta.
+- Scripts Python: `process_map.py` (vendorizado en cada carpeta `scripts/`) implementa esta
+  tabla; los que escriben work items exigen `--process` (o `ADO_PROCESS`).
+
+Fuentes (Microsoft Learn, verificadas 2026-11-04): *Default processes and process templates*
+(tipos, estados, estimación de Task) y *Query by numeric fields* (StoryPoints = Agile,
+Effort = Scrum, Size = CMMI, Activity = Agile/Scrum, Discipline = CMMI). ⚠️ Basic + Effort:
+observado en un proyecto real, no figura en esas páginas — verificar.

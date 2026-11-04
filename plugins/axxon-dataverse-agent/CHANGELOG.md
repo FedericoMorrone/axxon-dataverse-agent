@@ -1,5 +1,27 @@
 # Changelog — Axxon Dataverse Agent
 
+## v0.12.0 (2026-11-04)
+
+Fixes de prioridad 1 sobre el documento de hallazgos de un consultor que usa las skills.
+
+- **Process template (hallazgo H-10):** se elimina el supuesto Agile (`User Story` +
+  `StoryPoints`). Ver contrato ADO §9 (`axxon-dataverse-agent/docs/ado-contract.md`).
+  - **`docs/ado-contract.md` §9** (nueva): tabla Agile / Scrum / Basic / CMMI — tipo de
+    requerimiento, campo de esfuerzo, estados (en curso, resuelto, retirar sin borrar),
+    estimación y disciplina de la Task. Consultas con
+    `IN GROUP 'Microsoft.RequirementCategory'`. Verificado contra Microsoft Learn (Basic +
+    Effort: observado en un proyecto real, no documentado — marcado para verificar).
+  - **`.d365-project.md`**: campo opcional `- Proceso:` en `## Azure DevOps`;
+    `validate_project_context.py` lo valida si está y avisa si falta (sin bloquear).
+  - Decisión abierta 1 (`Activity`): sigue abierta, ahora documentada por proceso.
+- **Descripciones de skills acortadas (hallazgo H-02):** Claude Code carga en cada turno un
+  listado de skills con presupuesto de caracteres (~1% del contexto) y, si se excede,
+  descarta las descripciones de las skills menos usadas — verificado en la documentación
+  oficial y en una sesión real, donde las skills de este paquete aparecían sin descripción
+  (afecta la activación automática). Se reescribieron a < 300 caracteres, caso de uso
+  principal primero, en bloque YAML `>-`. Total de las 35 skills axxon: 26.540 → ~6.400
+  caracteres.
+
 ## v0.11.0 (2026-11-04)
 
 Azure DevOps del proyecto como punto de encuentro entre roles y agentes (ADR-005).

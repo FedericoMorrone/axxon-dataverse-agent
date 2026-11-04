@@ -1,14 +1,10 @@
 ---
 name: axxon-orchestrator
-description: >
-  Coordina el trabajo de Axxon Consulting a lo largo del ciclo de vida completo de un proyecto
-  Dynamics 365 / Power Platform, delegando a subagentes especializados por fase de Success by
-  Design: Strategize, Plan, Implement, y Deploy (Operate no está agentizado). Identifica en
-  qué fase está el chat actual y registra cada acción en el log de esa fase. Usar esta skill
-  como punto de entrada cuando no es evidente en qué fase del proyecto está el pedido del
-  usuario, cuando el pedido cruza más de una fase, o al iniciar un chat nuevo para confirmar
-  qué fase corresponde. Si ya es evidente la fase (el usuario menciona un RFP, pide crear una
-  tabla, o pregunta por la daily), invocar directo el subagente correspondiente.
+description: >-
+  Punto de entrada del supraagente Axxon: identifica la fase Success by Design del pedido
+  (Strategize, Plan, Implement, Deploy), delega al subagente correspondiente y registra en el
+  log de esa fase. Usar al iniciar un chat, o cuando la fase no es obvia o el pedido cruza
+  fases.
 ---
 
 # Axxon Orchestrator — supraagente Axxon Dataverse Agent
@@ -99,6 +95,7 @@ otro. Cada fase con su propio archivo elimina ese riesgo — concurrencia segura
 - Project: {project}
 - Repo: {repo — único por proyecto: solución + código pro-code + infra + pipelines}
 - Rama base: {opcional, default main}
+- Proceso: {Agile | Scrum | Basic | CMMI — ADO → Project settings → Process}
 
 ## Azure — suscripciones
 - {propósito, ej. "MCP Server / integraciones"}: {subscription id o nombre} ({resource group si aplica})
