@@ -1,5 +1,20 @@
 # Changelog — Axxon Dataverse Agent
 
+## v0.13.0 (2026-11-04)
+
+Fixes de prioridad 2 del documento de hallazgos.
+
+- **Contexto unificado (H-01, H-04):** `.d365-project.md` es el único contexto del proyecto,
+  también para el architect usado sin el supraagente (el `.d365-session.md` viejo se migra con
+  confirmación). Árbol de `.d365-fases/` documentado con el caché técnico del architect en
+  `fase-2-implement.md` y el nuevo `transversal.md`.
+- **Modo solo DEV (H-01):** TEST y PROD aceptan `N/A`; `validate_project_context.py` lo
+  informa como aviso (no error) y `deploy-manager` bloquea la promoción a un ambiente `N/A`.
+  Nunca URLs ficticias para pasar la validación.
+- **Trabajo transversal (H-04):** preparación/verificación sin fase SbD se loguea en
+  `.d365-fases/transversal.md`, sin preguntar la fase.
+- Documento de decisiones: corregida la versión de PAC CLI (H-13).
+
 ## v0.12.0 (2026-11-04)
 
 Fixes de prioridad 1 sobre el documento de hallazgos de un consultor que usa las skills.

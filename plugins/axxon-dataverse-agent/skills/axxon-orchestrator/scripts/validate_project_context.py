@@ -33,6 +33,20 @@ def is_valid_url(value: str) -> bool:
         return False
 
 
+def is_not_applicable(value: str | None) -> bool:
+    """`N/A` declara explícitamente que el ambiente no existe (modo solo DEV)."""
+    return bool(value) and value.strip().upper() in ("N/A", "NA")
+
+
+def check_dev_only(data: dict) -> list[str]:
+    """Avisos para TEST/PROD declarados N/A — no son errores: bloquean la promoción."""
+    na = [env for env in ("TEST", "PROD") if is_not_applicable(data["dataverse"].get(env))]
+    if not na:
+        return []
+    return [f"Dataverse {', '.join(na)}: N/A — modo solo DEV. La promoción a "
+            f"{' y '.join(na)} queda bloqueada (solution-packager / deploy-manager)."]
+
+
 def is_nonempty(value: str | None) -> bool:
     return bool(value and value.strip() and value.strip() not in ("—", "-", "TBD", "TODO"))
 
@@ -159,6 +173,8 @@ def validate(data: dict) -> list[str]:
 
     for env in REQUIRED_DATAVERSE_ENVS:
         value = data["dataverse"].get(env)
+        if env != "DEV" and is_not_applicable(value):
+            continue  # modo solo DEV: TEST/PROD = N/A es válido (ver check_dev_only)
         if not is_nonempty(value):
             errors.append(f"Dataverse {env}: falta o está vacío.")
         elif not is_valid_url(value):
@@ -209,6 +225,7 @@ def main() -> int:
     proc_errors, proc_warnings = check_process(data)
     errors += proc_errors
     warnings += proc_warnings
+    warnings += check_dev_only(data)
 
     for w in warnings:
         print(f"⚠️  {w}")

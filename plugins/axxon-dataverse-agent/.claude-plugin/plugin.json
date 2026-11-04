@@ -1,7 +1,7 @@
 {
   "name": "axxon-dataverse-agent",
   "displayName": "Axxon Dataverse Agent",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Supraagente orquestador de Axxon Consulting para proyectos Dynamics 365 / Power Platform: coordina subagentes especializados por fase de Success by Design (Strategize, Plan, Implement, Deploy) a lo largo del ciclo de vida del proyecto, con logs de acciones separados por fase.",
   "author": {
     "name": "Axxon Consulting"

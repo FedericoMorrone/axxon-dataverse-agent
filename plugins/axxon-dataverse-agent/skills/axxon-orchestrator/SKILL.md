@@ -63,6 +63,10 @@ al usuario al principio de la conversación si no surge solo del pedido.
    o Deploy?"** (formato corto, sin explayarte).
 3. Una vez identificada, buscá o creá el archivo de log de esa fase (ver estructura abajo) y
    usalo para el resto de la conversación — no vuelvas a preguntar en esa misma conversación.
+4. **Trabajo transversal sin fase SbD** (preparar o verificar el entorno —
+   `environment-check`, `dataverse-connect`—, completar o migrar `.d365-project.md`,
+   diagnósticos, pruebas de las propias skills): no fuerces una fase. Logueá en
+   `.d365-fases/transversal.md` (mismo formato de tabla) y no preguntes la fase.
 
 ### Estructura de archivos (reemplaza al `.d365-session.md` único de versiones previas)
 
@@ -72,8 +76,9 @@ al usuario al principio de la conversación si no surge solo del pedido.
 └── .d365-fases/
     ├── fase-0-strategize.md      ← log de acciones de esa fase, un archivo por fase
     ├── fase-1-plan.md
-    ├── fase-2-implement.md
-    └── fase-3-deploy.md
+    ├── fase-2-implement.md       ← también guarda el "## Caché técnico" del architect
+    ├── fase-3-deploy.md
+    └── transversal.md            ← preparación/verificación sin fase SbD
 ```
 
 **Por qué separado:** si dos consultores (o el mismo, en dos chats) trabajan Plan e Implement
@@ -87,8 +92,8 @@ otro. Cada fase con su propio archivo elimina ese riesgo — concurrencia segura
 
 ## Dataverse
 - DEV: https://orgXXX-dev.crm2.dynamics.com
-- TEST: https://orgXXX-test.crm2.dynamics.com
-- PROD: https://orgXXX.crm2.dynamics.com
+- TEST: https://orgXXX-test.crm2.dynamics.com   ← o `N/A` (modo solo DEV)
+- PROD: https://orgXXX.crm2.dynamics.com        ← o `N/A` (modo solo DEV)
 
 ## Azure DevOps (definitivo)
 - Organización: {org}
@@ -141,7 +146,13 @@ python skills/axxon-orchestrator/scripts/validate_project_context.py .d365-proje
 
 Valida que las URLs de Dataverse tengan forma de URL, que ningún campo esté vacío, y que el
 publisher prefix sea `axx_` (si no lo es, no lo corrijas solo — confirmá con el usuario si es
-intencional). **Esto valida formato, no que los datos sean correctos** — una URL bien formada
+intencional). TEST y PROD aceptan `N/A` (**modo solo DEV**, para sandboxes o pruebas): el
+script lo informa como aviso y la promoción a ese ambiente queda bloqueada. Nunca cargues
+URLs ficticias para pasar la validación.
+
+Este archivo es **el único contexto del proyecto** también para el plugin Axxon Dataverse
+Architect usado sin el supraagente (reemplaza al `.d365-session.md` de versiones
+anteriores; el conductor `dataverse-architect` ofrece migrarlo si lo encuentra). **Esto valida formato, no que los datos sean correctos** — una URL bien formada
 puede seguir apuntando a un environment equivocado; eso lo confirma el usuario, no el script.
 
 Todos los subagentes de Fase 2 en adelante (`dataverse-builder`, `deploy-manager`,

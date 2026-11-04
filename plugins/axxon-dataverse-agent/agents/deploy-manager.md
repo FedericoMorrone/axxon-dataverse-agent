@@ -31,6 +31,9 @@ excepción, ni siquiera para pedidos que parezcan triviales o de solo lectura.**
    valor "razonable", no sigas con el pedido original todavía.
 4. Solo si la validación pasa (`✅`), seguís con el resto de este archivo y el pedido del
    usuario.
+5. **Modo solo DEV:** si el ambiente destino del pedido (TEST o PROD) figura como `N/A` en
+   `.d365-project.md`, **PARÁ ACÁ** para ese pedido: no hay a dónde promover. Explicalo y
+   ofrecé completar la URL real cuando el ambiente exista — nunca uses una URL inventada.
 
 Este gate se corre **una vez por conversación** — si ya lo corriste y pasó en este chat, no
 hace falta repetirlo, salvo que el usuario diga que algo cambió.

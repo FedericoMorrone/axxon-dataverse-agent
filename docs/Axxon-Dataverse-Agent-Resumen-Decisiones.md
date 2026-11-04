@@ -66,7 +66,7 @@ Se cruzó el catálogo oficial (8 skills: dv-connect, dv-metadata, dv-data, dv-q
   - Incorpora 2 bugs reales documentados de Microsoft: el export/unpack debe correrse como comandos **separados** (race condition de lock de ZIP en Windows si se encadenan), y el header `MSCRM.SolutionName` falla **silenciosamente** si está mal escrito (hay que verificar vía `solutioncomponent`).
   - Nueva sección "Validación post-import" vía SDK (`client.tables.get()`, `systemform`, `savedquery`, `importjob`) con tabla de errores comunes.
 - **Fix transversal de gobernanza:** las 4 skills que llaman `add_to_solution` (`entity-builder`, `form-designer`, `view-designer`, `business-rule-engine`) nunca especificaban de dónde sale el `SolutionUniqueName` real. Se agregó a las 4 una sección idéntica: leer `.d365-session.md` primero; si falta/es ambigua, llamar a `list_solutions` de `solution-packager` y preguntar explícitamente al usuario — **nunca asumir ni tomar la primera solución de la lista**.
-- **`environment-check`** (nueva skill, adoptada del patrón `orchestration.md` del framework "Antigravity"): verifica Node.js/PAC CLI (≥2.7.0)/Azure Functions Core Tools/Azure CLI antes de correr `genpage-builder`/`code-app-builder`/`azure-function-builder` — solo reporta, nunca instala. Se adoptó explícitamente el patrón de verificación de entorno, **no** el mecanismo de autenticación de `devops-login.md` (superado por el MCP de ADO del ADR-001).
+- **`environment-check`** (nueva skill, adoptada del patrón `orchestration.md` del framework "Antigravity"): verifica Node.js/PAC CLI (última versión para Generative Pages; la numeración es 1.x — corregido 2026-11-04, hallazgo H-13)/Azure Functions Core Tools/Azure CLI antes de correr `genpage-builder`/`code-app-builder`/`azure-function-builder` — solo reporta, nunca instala. Se adoptó explícitamente el patrón de verificación de entorno, **no** el mecanismo de autenticación de `devops-login.md` (superado por el MCP de ADO del ADR-001).
 
 **Pausado explícitamente (no retomar sin autorización):**
 1. Evaluar migración a `dv-metadata`/`dv-security`/`dv-overview` de Microsoft vs. las skills propias equivalentes (`entity-builder`+`form-designer`+`view-designer` / `security-architect` / `dataverse-architect`).
@@ -86,7 +86,7 @@ Se cruzó el catálogo oficial (8 skills: dv-connect, dv-metadata, dv-data, dv-q
 
 **Bug confirmado de Claude Desktop:** un MCP server registrado con `"url"` directo en `claude_desktop_config.json` corrompe el archivo silenciosamente — el fix es usar `mcp-remote` como bridge (`"command":"npx","args":["mcp-remote","<url>"]`).
 
-**Dependencias de CLI:** PAC CLI (≥2.7.0, requiere .NET 10.0+), Azure CLI, Azure Functions Core Tools, Node.js — todas verificadas por `environment-check` antes de los builders que las necesitan.
+**Dependencias de CLI:** PAC CLI (1.x, última versión para Generative Pages), Azure CLI, Azure Functions Core Tools, Node.js — todas verificadas por `environment-check` antes de los builders que las necesitan.
 
 ---
 
