@@ -140,7 +140,7 @@ Construida sobre FastAPI + Anthropic Agent SDK. Mejoras entregadas (v2/v2.1/v2.2
 
 ## 10. Repositorios
 
-**Remotes:** cada repo vive en **Azure DevOps** (`dev.azure.com/FeMorrone/Axxon Dataverse Agent`, remote `origin`) y, salvo excepciones, en **GitHub** (`github.com/FedericoMorrone`, remote `github`).
+**Remotes:** cada repo vive en **Azure DevOps — org corporativa `AXXONGROUP`** (`https://dev.azure.com/AXXONGROUP/Axxon%20Dataverse%20Agent/_git/<repo>`, remote `origin`, definido 2026-11-04) y, salvo excepciones, en **GitHub** (`github.com/FedericoMorrone`, remote `github`). La org personal `FeMorrone` queda solo como remote de referencia `ado-femorrone` — ya no se pushea ahí.
 **Clones de trabajo locales:** `C:\Users\fmorr\OneDrive - AXXON GROUP\01 AIDev\01 Axxon Dataverse Agent\<repo>` (desde 2026-11-04).
 
 | Repo | Contenido | Rama | ADO | GitHub |
@@ -150,14 +150,16 @@ Construida sobre FastAPI + Anthropic Agent SDK. Mejoras entregadas (v2/v2.1/v2.2
 | `axxon-strategize-suite` | Fase 0 — kickoff-brief, backlog-seeder | `main` | ✅ | ✅ |
 | `axxon-sprint0-suite` | Fase 1 — refinement-prep, d365-requirements-analyst, bpc-analyser, fdd-builder, blueprint-builder, fit-gap-rollup, effort-recalibration, backlog-refiner | `main` | ✅ | ✅ |
 | `axxon-delivery-suite` | Gobierno diario de delivery/ALM — ado-daily-prep, ado-us-planner | `main` | ✅ | ✅ |
-| `axxon-dvagent-webapp` | Web app Docker (FastAPI + Anthropic Agent SDK) | `master` | ✅ | ❌ no existe (decidido no crearlo por ahora) |
+| `axxon-dvagent-webapp` | Web app Docker (FastAPI + Anthropic Agent SDK) | `master` | ⚠️ solo en `FeMorrone` (no existe en `AXXONGROUP`) | ❌ no existe (decidido no crearlo por ahora) |
 | `axxon-marketplace` | Marketplace Axxon + perfil dataverse-agent | `main` | ❌ | ❌ sin remote (solo local) |
 
 **Regla de push (decidida 2026-11-04):** cada commit que se pushea va a **ADO y GitHub a la vez**. En los 5 repos de plugins, `origin` tiene configuradas las dos push URLs, así que `git push origin main` sube a ambos; después de cada push se verifica vía fetch que los dos remotes quedaron en el mismo SHA. El webapp pushea solo a ADO hasta que exista su repo en GitHub.
 
 **Sincronización 2026-11-04:** antes de esta fecha los remotes estaban divergidos (architect v1.6.0-rc1 y strategize v0.5.0 solo en GitHub; el fix v0.8.1 de `axxon-dataverse-agent` solo en ADO; webapp v2.1/v2.2 sin pushear). Se sincronizaron con fast-forwards — hoy los 5 repos de plugins tienen el mismo SHA en ADO y GitHub, y el webapp está al día en ADO.
 
-> ⚠️ Los plugins instalados en `~/.claude/plugins/marketplaces` se alimentan de **ADO**; tras la sincronización hay que actualizar el marketplace desde Claude Code para que tomen la v1.6.0-rc1. Copias viejas del webapp quedan en `99 Interno\00 Practica\IA\` y `…\IA\_legacy\`.
+> ⚠️ Los repos `FedericoMorrone/axxon-*` de GitHub son **públicos** (verificado 2026-11-04) — no pushear contenido interno a GitHub hasta pasarlos a privados.
+>
+> ⚠️ Los plugins instalados en `~/.claude/plugins/marketplaces` se alimentan de **ADO `FeMorrone`** — hay que re-apuntar esos marketplaces a `AXXONGROUP`; tras la sincronización hay que actualizar el marketplace desde Claude Code para que tomen la v1.6.0-rc1. Copias viejas del webapp quedan en `99 Interno\00 Practica\IA\` y `…\IA\_legacy\`.
 
 ---
 
