@@ -1,5 +1,19 @@
 # Changelog — Axxon Dataverse Agent
 
+## v0.9.0 (2026-11-04)
+
+Soporte para el registro de ADRs del proyecto (skill `adr-recorder`, Axxon Dataverse
+Architect v1.7.0-rc1 — ver ADR-005 de ese repo).
+
+- **`.d365-project.md`**: nueva sección opcional `## Wiki de ADRs` (Wiki, Ruta raíz) en el
+  schema de `axxon-orchestrator`.
+- **`validate_project_context.py`**: valida la sección solo si está presente (Wiki no vacía,
+  Ruta raíz empieza con `/`); si falta, emite un aviso sin bloquear el handoff Fase 1 → Fase 2.
+  El parser de esta sección usa `[ \t]*` en vez de `\s*` para que un valor vacío no capture la
+  línea siguiente.
+- **`dataverse-builder`**: menciona `adr-recorder` y dónde se loguea un ADR registrado
+  (`.d365-fases/fase-2-implement.md`).
+
 ## v0.8.1 (2026-08-21)
 
 - **Fix crítico de carga**: el plugin no cargaba ("couldn't be loaded") desde v0.1.0. Causa

@@ -109,8 +109,17 @@ otro. Cada fase con su propio archivo elimina ese riesgo — concurrencia segura
 ## Solución Dataverse
 - {ej. ClienteXCreditOnboarding}
 
+## Wiki de ADRs
+- Wiki: {nombre o id de la wiki de proyecto, ej. ClienteX.wiki}
+- Ruta raíz: /Arquitectura/ADRs
+
 - Última actualización: {fecha} · confirmado por: {quién}
 ```
+
+La sección `## Wiki de ADRs` es **opcional** para el handoff (el validador avisa si falta, pero
+no bloquea): la usa `adr-recorder` (plugin Axxon Dataverse Architect) para registrar las
+decisiones de arquitectura del proyecto en la wiki de proyecto de Azure DevOps. Si falta cuando
+se necesita, `adr-recorder` frena y la pide.
 
 Se crea/confirma en el **handoff Fase 1 → Fase 2** — antes, durante Fase 0/1, es común
 trabajar contra un Project de Azure DevOps de prueba (como el usado en todas las

@@ -40,7 +40,7 @@ def is_nonempty(value: str | None) -> bool:
 def parse_project_context(text: str) -> dict:
     """Parser simple orientado al schema definido en axxon-orchestrator/SKILL.md — no es un
     parser de Markdown genérico, asume la estructura de secciones/bullets documentada ahí."""
-    data: dict = {"dataverse": {}, "ado": {}, "azure_subscriptions": [], "prefix": None}
+    data: dict = {"dataverse": {}, "ado": {}, "azure_subscriptions": [], "prefix": None, "adr_wiki": None}
 
     dataverse_section = re.search(r"## Dataverse\n(.*?)(?=\n## |\Z)", text, re.DOTALL)
     if dataverse_section:
@@ -67,7 +67,34 @@ def parse_project_context(text: str) -> dict:
         m = re.search(r"-\s*(\S+)", prefix_section.group(1))
         data["prefix"] = m.group(1) if m else None
 
+    # Opcional — solo se valida si la sección existe (la usa adr-recorder).
+    wiki_section = re.search(r"## Wiki de ADRs\n(.*?)(?=\n## |\Z)", text, re.DOTALL)
+    if wiki_section:
+        data["adr_wiki"] = {}
+        for field, label in [("wiki", "Wiki"), ("ruta", "Ruta raíz")]:
+            # [ \t]* (no \s*): un valor vacío no debe capturar la línea siguiente.
+            m = re.search(rf"^[ \t]*-[ \t]*{label}:[ \t]*(.*)$", wiki_section.group(1), re.MULTILINE)
+            data["adr_wiki"][field] = m.group(1).strip() if m else None
+
     return data
+
+
+def check_adr_wiki(data: dict) -> tuple[list[str], list[str]]:
+    """Devuelve (errores, avisos) de la sección opcional `## Wiki de ADRs`.
+    Ausente → solo aviso (no bloquea el handoff). Presente pero mal formada → error."""
+    wiki = data.get("adr_wiki")
+    if wiki is None:
+        return [], ["Wiki de ADRs: sección ausente (opcional) — adr-recorder la va a pedir cuando haga falta."]
+
+    errors = []
+    if not is_nonempty(wiki.get("wiki")):
+        errors.append("Wiki de ADRs — Wiki: falta o está vacío.")
+    ruta = wiki.get("ruta")
+    if not is_nonempty(ruta):
+        errors.append("Wiki de ADRs — Ruta raíz: falta o está vacío.")
+    elif not ruta.startswith("/"):
+        errors.append(f"Wiki de ADRs — Ruta raíz: '{ruta}' debe empezar con '/' (ej. /Arquitectura/ADRs).")
+    return errors, []
 
 
 def validate(data: dict) -> list[str]:
@@ -118,6 +145,11 @@ def main() -> int:
     text = path.read_text(encoding="utf-8")
     data = parse_project_context(text)
     errors = validate(data)
+    wiki_errors, warnings = check_adr_wiki(data)
+    errors += wiki_errors
+
+    for w in warnings:
+        print(f"⚠️  {w}")
 
     if errors:
         print(f"❌ '{path}' tiene {len(errors)} problema(s) de formato — NO dar por completo el handoff:\n")
