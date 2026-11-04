@@ -157,17 +157,36 @@ Construida sobre FastAPI + Anthropic Agent SDK. Mejoras entregadas (v2/v2.1/v2.2
 
 **Sincronización 2026-11-04:** antes de esta fecha los remotes estaban divergidos (architect v1.6.0-rc1 y strategize v0.5.0 solo en GitHub; el fix v0.8.1 de `axxon-dataverse-agent` solo en ADO; webapp v2.1/v2.2 sin pushear). Se sincronizaron con fast-forwards — hoy los 5 repos de plugins tienen el mismo SHA en ADO y GitHub, y el webapp está al día en ADO.
 
-> ⚠️ Los repos `FedericoMorrone/axxon-*` de GitHub son **públicos** (verificado 2026-11-04) — no pushear contenido interno a GitHub hasta pasarlos a privados.
+> ⚠️ Los repos `FedericoMorrone/axxon-*` de GitHub son **públicos** (verificado 2026-11-04). Decisión del usuario: se sigue pusheando a GitHub igual mientras sean públicos (pasarlos a privado queda pendiente) — nunca subir credenciales, secrets ni datos de clientes.
 >
-> ⚠️ Los plugins instalados en `~/.claude/plugins/marketplaces` se alimentan de **ADO `FeMorrone`** — hay que re-apuntar esos marketplaces a `AXXONGROUP`; tras la sincronización hay que actualizar el marketplace desde Claude Code para que tomen la v1.6.0-rc1. Copias viejas del webapp quedan en `99 Interno\00 Practica\IA\` y `…\IA\_legacy\`.
+> Copias viejas del webapp quedan en `99 Interno\00 Practica\IA\` y `…\IA\_legacy\`.
+
+### Instalación de los plugins
+
+**Claude Code** — los 5 marketplaces se registran directo contra **ADO `AXXONGROUP`** (fuente git; clona con las credenciales git locales, nunca las pide). Re-apuntados el 2026-11-04 (antes leían de `FeMorrone` y estaban en versiones viejas); plugins instalados en scope `user`.
+
+```bash
+claude plugin marketplace add "https://dev.azure.com/AXXONGROUP/Axxon%20Dataverse%20Agent/_git/<repo>"
+claude plugin install <repo>@<repo>-marketplace --scope user
+# después de cada push, para tomar la versión nueva:
+claude plugin marketplace update <repo>-marketplace
+```
+
+**Cowork** — su flujo de marketplace personal (*Customize → Plugins → Add marketplace → Add from a repository*) documenta GitHub y repos **públicos** de GitLab/Bitbucket; **no documenta Azure DevOps** ni repos privados no-GitHub (no probado en la UI). Opciones:
+- Agregar como marketplace los repos GitHub `FedericoMorrone/axxon-*` (mismos commits que ADO por el push dual). Puede dejar de funcionar en el flujo personal cuando pasen a privados.
+- Distribución por la organización (Team/Enterprise, un Owner): subir el `.zip` del plugin o GitHub sync desde un repo privado. ADO no figura como fuente.
+- Lo instalado en Claude Code **no** aparece en Cowork; al revés sí (los plugins de la cuenta claude.ai se sincronizan a Claude Code).
+
+Fuentes: [Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude) · [Manage Cowork plugins for your organization](https://support.claude.com/en/articles/13837433-manage-cowork-plugins-for-your-organization) · [Claude Code — install plugins](https://code.claude.com/docs/en/plugins/install.md)
 
 ---
 
 ## 11. Estado actual
 
 - **Foco actual:** Fase 2 (Implement).
-- **Última versión mayor de `axxon-dataverse-architect`:** v1.6.0-rc1 (hybrid `solution-packager` + `dataverse-connect` + `environment-check`).
-- **Repos:** 6. **Subagentes:** 5. **Skills:** ~31.
+- **Última versión de `axxon-dataverse-architect`:** v1.7.0-rc1 (2026-11-04) — skill `adr-recorder`: ADRs del proyecto del cliente en la wiki de proyecto de ADO (ver ADR-005 del architect). Anterior: v1.6.0-rc1 (hybrid `solution-packager` + `dataverse-connect` + `environment-check`).
+- **`axxon-dataverse-agent`:** v0.9.0 (sección opcional `## Wiki de ADRs` en `.d365-project.md`).
+- **Repos:** 6. **Subagentes:** 5. **Skills:** ~32.
 
 ---
 
