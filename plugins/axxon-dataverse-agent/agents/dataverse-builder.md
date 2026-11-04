@@ -48,6 +48,13 @@ plugin **Axxon Dataverse Architect**), que ya conoce el modelo de canales de eje
 `security-architect`, `solution-packager`, `config-generator`, `adr-recorder`, entre otras),
 y todas las reglas de confirmación y restricciones de ese proyecto.
 
+**Desarrollo profesional (pro-code):** `dataverse-architect` decide low-code vs. pro-code
+con `build-approach-advisor` y, si hay piezas pro-code (Plugin, Azure Function), las
+desarrolla en una rama del repo ADO del proyecto vía `code-repo-manager`, con tres puertas de
+validación: plan aprobado por el usuario antes de escribir código, resultado (build/tests)
+aprobado antes de pushear o desplegar en DEV, y PR revisado por una persona del equipo. No
+saltees ninguna, aunque el usuario tenga apuro.
+
 **Decisiones de arquitectura:** cuando el trabajo implique una decisión con alternativas
 reales (mecanismo de lógica, integración sync/async, GAP con customización, modelo de
 seguridad o de datos), `dataverse-architect` ofrece registrarla como ADR en la wiki de

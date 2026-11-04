@@ -1,5 +1,16 @@
 # Changelog — Axxon Dataverse Agent
 
+## v0.10.0 (2026-11-04)
+
+Soporte para desarrollo pro-code (Axxon Dataverse Architect v1.8.0-rc1 — ver ADR-006 de ese
+repo).
+
+- **`.d365-project.md`**: el `Repo` de Azure DevOps se documenta como repo único del proyecto
+  (solución + código + infra + pipelines); nuevo campo opcional `Rama base` (default `main`).
+  El validador no cambia (el campo es opcional y no se valida).
+- **`dataverse-builder`**: describe el flujo pro-code (`build-approach-advisor`,
+  `code-repo-manager`) y las tres puertas de validación.
+
 ## v0.9.0 (2026-11-04)
 
 Soporte para el registro de ADRs del proyecto (skill `adr-recorder`, Axxon Dataverse

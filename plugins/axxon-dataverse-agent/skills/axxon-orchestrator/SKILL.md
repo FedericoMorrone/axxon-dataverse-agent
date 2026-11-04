@@ -97,7 +97,8 @@ otro. Cada fase con su propio archivo elimina ese riesgo — concurrencia segura
 ## Azure DevOps (definitivo)
 - Organización: {org}
 - Project: {project}
-- Repo: {repo}
+- Repo: {repo — único por proyecto: solución + código pro-code + infra + pipelines}
+- Rama base: {opcional, default main}
 
 ## Azure — suscripciones
 - {propósito, ej. "MCP Server / integraciones"}: {subscription id o nombre} ({resource group si aplica})
