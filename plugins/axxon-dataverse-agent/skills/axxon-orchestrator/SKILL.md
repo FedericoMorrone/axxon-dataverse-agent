@@ -114,8 +114,17 @@ otro. Cada fase con su propio archivo elimina ese riesgo — concurrencia segura
 - Wiki: {nombre o id de la wiki de proyecto, ej. ClienteX.wiki}
 - Ruta raíz: /Arquitectura/ADRs
 
+## Equipo
+- {email o display name en ADO}: {Funcional | Customizador | Dev | Tech lead | PM}
+- (una línea por persona; una persona puede tener dos roles separados por coma)
+
 - Última actualización: {fecha} · confirmado por: {quién}
 ```
+
+La sección `## Equipo` es **opcional** (el validador avisa si falta, sin bloquear): define el
+rol de cada persona para el flujo entre roles con ADO como pivot (ver
+`docs/ado-contract.md`). Si la persona que usa el agente no está listada, el agente pregunta
+su rol una vez por sesión.
 
 La sección `## Wiki de ADRs` es **opcional** para el handoff (el validador avisa si falta, pero
 no bloquea): la usa `adr-recorder` (plugin Axxon Dataverse Architect) para registrar las

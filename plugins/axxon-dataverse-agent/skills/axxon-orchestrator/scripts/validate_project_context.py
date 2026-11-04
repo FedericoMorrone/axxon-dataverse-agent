@@ -40,7 +40,7 @@ def is_nonempty(value: str | None) -> bool:
 def parse_project_context(text: str) -> dict:
     """Parser simple orientado al schema definido en axxon-orchestrator/SKILL.md — no es un
     parser de Markdown genérico, asume la estructura de secciones/bullets documentada ahí."""
-    data: dict = {"dataverse": {}, "ado": {}, "azure_subscriptions": [], "prefix": None, "adr_wiki": None}
+    data: dict = {"dataverse": {}, "ado": {}, "azure_subscriptions": [], "prefix": None, "adr_wiki": None, "equipo": None}
 
     dataverse_section = re.search(r"## Dataverse\n(.*?)(?=\n## |\Z)", text, re.DOTALL)
     if dataverse_section:
@@ -76,7 +76,48 @@ def parse_project_context(text: str) -> dict:
             m = re.search(rf"^[ \t]*-[ \t]*{label}:[ \t]*(.*)$", wiki_section.group(1), re.MULTILINE)
             data["adr_wiki"][field] = m.group(1).strip() if m else None
 
+    # Opcional — roles del equipo (flujo entre roles, docs/ado-contract.md).
+    team_section = re.search(r"## Equipo\n(.*?)(?=\n## |\Z)", text, re.DOTALL)
+    if team_section:
+        data["equipo"] = [
+            line.strip()[1:].strip()
+            for line in team_section.group(1).splitlines()
+            if line.strip().startswith("-") and not line.strip()[1:].strip().startswith("(")
+        ]
+
     return data
+
+
+VALID_ROLES = {"funcional", "customizador", "dev", "tech lead", "pm"}
+
+
+def check_team(data: dict) -> tuple[list[str], list[str]]:
+    """Devuelve (errores, avisos) de la sección opcional `## Equipo`.
+    Ausente → aviso. Presente → cada línea `persona: rol[, rol]` con roles válidos."""
+    team = data.get("equipo")
+    if team is None:
+        return [], ["Equipo: sección ausente (opcional) — los agentes van a preguntar el rol una vez por sesión."]
+    if not team:
+        return ["Equipo: la sección existe pero no lista a nadie."], []
+
+    errors = []
+    for i, entry in enumerate(team, 1):
+        if ":" not in entry:
+            errors.append(f"Equipo #{i}: '{entry}' — formato esperado 'persona: rol'.")
+            continue
+        persona, roles_raw = entry.rsplit(":", 1)
+        if not is_nonempty(persona):
+            errors.append(f"Equipo #{i}: falta la persona.")
+        roles = [r.strip().lower() for r in roles_raw.split(",") if r.strip()]
+        if not roles:
+            errors.append(f"Equipo #{i}: falta el rol de '{persona.strip()}'.")
+        for r in roles:
+            if r not in VALID_ROLES:
+                errors.append(
+                    f"Equipo #{i}: rol '{r}' no válido para '{persona.strip()}' "
+                    f"(válidos: Funcional, Customizador, Dev, Tech lead, PM)."
+                )
+    return errors, []
 
 
 def check_adr_wiki(data: dict) -> tuple[list[str], list[str]]:
@@ -147,6 +188,9 @@ def main() -> int:
     errors = validate(data)
     wiki_errors, warnings = check_adr_wiki(data)
     errors += wiki_errors
+    team_errors, team_warnings = check_team(data)
+    errors += team_errors
+    warnings += team_warnings
 
     for w in warnings:
         print(f"⚠️  {w}")

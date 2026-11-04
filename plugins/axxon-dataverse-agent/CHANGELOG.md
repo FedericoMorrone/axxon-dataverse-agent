@@ -1,5 +1,22 @@
 # Changelog — Axxon Dataverse Agent
 
+## v0.11.0 (2026-11-04)
+
+Azure DevOps del proyecto como punto de encuentro entre roles y agentes (ADR-005).
+
+- **`docs/ado-contract.md`** (nuevo): contrato único que leen y escriben todos los agentes —
+  roles, tags (`procode-candidato`, `us-tecnica`, `plan-aprobado`, `build-lowcode`,
+  `build-procode`, `comp-*`), comentarios con marcador (`[axx:plan-construccion v1]`,
+  `[axx:aprobacion-procode v1]`, `[axx:contrato-tecnico v1]`, `[axx:handoff v1]`,
+  `[axx:resultado v1]`), Tasks `[LC]`/`[PC]`, dependencias, ramas/PRs y estados. Campo
+  `Activity`: decisión abierta, no se escribe.
+- **`docs/ADR-005-ado-hub-workflow.md`** (nuevo).
+- **`.d365-project.md`**: sección opcional `## Equipo` (persona → rol: Funcional,
+  Customizador, Dev, Tech lead, PM). `validate_project_context.py` la valida solo si está
+  presente (formato `persona: rol[, rol]`, roles válidos); si falta, aviso sin bloquear.
+- **`delivery-manager`**: routing a `ado-dev-queue` y resumen del flujo entre roles.
+- `docs/prerequisites-ado-mcp-server.md`: estado de migración a MCP actualizado.
+
 ## v0.10.0 (2026-11-04)
 
 Soporte para desarrollo pro-code (Axxon Dataverse Architect v1.8.0-rc1 — ver ADR-006 de ese

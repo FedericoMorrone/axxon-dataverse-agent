@@ -16,7 +16,9 @@ la migración, el resto de las skills que tocan Azure DevOps (`refinement-prep`,
 | Skill | Vía |
 |---|---|
 | `backlog-seeder` | **Servidor MCP** — migrada, piloto |
-| `refinement-prep`, `backlog-refiner`, `fit-gap-rollup`, `effort-recalibration`, `blueprint-builder`, `ado-daily-prep`, `ado-us-planner` | `ado_client.py` todavía — pendientes de migrar |
+| `ado-us-planner`, `ado-daily-prep`, `ado-dev-queue` (nueva) | **Servidor MCP** — migradas 2026-11-04 (delivery-suite v0.3.0) |
+| `adr-recorder`, `code-repo-manager` (architect) | **Servidor MCP** (wiki / repos) |
+| `refinement-prep`, `backlog-refiner`, `fit-gap-rollup`, `effort-recalibration`, `blueprint-builder` | `ado_client.py` todavía — pendientes de migrar |
 
 `axxon-ado-connector` (el cliente vendorizado) no se retira — queda como fallback para las
 skills que todavía no migraron, y como referencia técnica.
