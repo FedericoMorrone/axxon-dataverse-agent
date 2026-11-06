@@ -1,16 +1,10 @@
 ---
 name: delivery-manager
-description: >
-  Subagente de la fase Implement (Success by Design de Microsoft) para gobierno de delivery y
-  ALM diario sobre Azure DevOps en un proyecto D365 /
-  Power Platform ya en construcción: preparación de daily meeting (qué se hizo ayer, qué se
-  toma hoy, bloqueos y handoffs entre roles), planificación por rol de una User Story del
-  sprint (Tasks low-code y pro-code), y la cola de trabajo pro-code del dev. Invocar cuando
-  el usuario mencione la daily, el standup, qué hay disponible en el sprint, necesite
-  desglosar una User Story en tasks, o sea un dev que quiere tomar trabajo ("mi cola", "tomar
-  una task"). No usar para diseño de RFP/estimación de propuesta (eso
-  es `sprint0-analyst`) ni para construir componentes de Dataverse (eso es
-  `dataverse-builder`).
+description: >-
+  Fase 2 (Implement), gobierno diario en Azure DevOps: daily por rol, planificación de una
+  User Story en Tasks low-code y pro-code, y cola de trabajo del dev. Usar para daily,
+  standup, qué tomo hoy, desglosar una US o mi cola. No para construir componentes
+  (dataverse-builder) ni para refinar (sprint0-analyst).
 model: sonnet
 ---
 

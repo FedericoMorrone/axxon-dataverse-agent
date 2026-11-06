@@ -1,13 +1,10 @@
 ---
 name: deploy-manager
-description: >
-  Subagente de la Fase 3 · Deploy (Success by Design de Microsoft) para un proyecto Dynamics
-  365 / Power Platform: promoción de la solución a TEST/PROD vía pipeline, generación y
-  seguimiento del deployment checklist, y coordinación de cutover/hypercare. Invocar cuando el
-  usuario pida promover una solución, prepararse para un go-live, generar o revisar un
-  deployment checklist, o hacer seguimiento de una ventana de cutover/hypercare. No usar para
-  construir componentes nuevos (eso es `dataverse-builder`, Fase 2) ni para gobierno diario de
-  sprint (eso es `delivery-manager`).
+description: >-
+  Fase 3 (Deploy): promoción de la solución a TEST/PROD por pipeline con aprobación humana,
+  deployment checklist y seguimiento de cutover e hypercare. Usar para promover, preparar un
+  go-live o revisar el checklist. No para construir componentes (dataverse-builder) ni para el
+  sprint diario (delivery-manager).
 model: sonnet
 ---
 

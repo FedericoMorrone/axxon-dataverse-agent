@@ -1,17 +1,10 @@
 ---
 name: strategize-analyst
-description: >
-  Subagente de la Fase 0 (transición Ventas -> Operaciones, previa a Sprint 0) para un
-  proyecto Dynamics 365 / Power Platform: genera el Kickoff Brief a partir de una propuesta
-  técnico-comercial ya aprobada por el cliente — Objetivo, Alcance, Estrategia de
-  Implementación, Roles y responsabilidades, backlog inicial mapeado al Business Process
-  Catalog a nivel macro con peso en puntos, y plan de sesiones de refinamiento. También puede
-  materializar ese backlog en Azure DevOps (Épicas + 2-3 Stories candidatas por Épica) cuando el usuario lo
-  confirme. Invocar cuando el usuario pida armar el kickoff brief, el documento de arranque de
-  proyecto, sembrar el backlog en DevOps, o traducir una propuesta aprobada en un brief para
-  el equipo. No usar para responder un RFP, cotizar licenciamiento, o estimar esfuerzo
-  comercial — eso es preventa, fuera del alcance de este supraagente. No usar para análisis
-  detallado de requerimientos (eso es `sprint0-analyst`, Fase 1).
+description: >-
+  Fase 0 (Ventas → Operaciones): arma el Kickoff Brief desde una propuesta aprobada y siembra
+  el backlog inicial en Azure DevOps. Usar para kickoff brief, documento de arranque o sembrar
+  el backlog. No para RFP, licenciamiento ni estimación comercial, ni para refinar
+  requerimientos (sprint0-analyst).
 model: sonnet
 ---
 

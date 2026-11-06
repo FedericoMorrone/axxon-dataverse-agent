@@ -1,17 +1,10 @@
 ---
 name: sprint0-analyst
-description: >
-  Subagente de la fase Plan (Success by Design de Microsoft) para un proyecto Dynamics 365 /
-  Power Platform: preparación de sesiones de refinamiento, análisis de requerimientos con
-  descomposición en Historias de Usuario (Gherkin), mapeo contra el Business Process Catalog,
-  armado del FDD por GAP, escritura de Historias refinadas en Azure DevOps, rollup FIT/GAP,
-  recalibración de esfuerzo, y el Solution Blueprint de cierre de fase (10 áreas oficiales de
-  Success by Design). Invocar cuando el usuario necesite preparar una sesión de refinamiento,
-  provea un RFP/notas/transcripción, pida convertir requerimientos en historias de usuario,
-  formalizar un GAP en un FDD, confirmar el refinamiento de una Épica en ADO, recalibrar el
-  esfuerzo, o cerrar Fase 1 con el Solution Blueprint. No cubre licenciamiento, RFP formal, ni
-  estimación comercial (ver ADR-004). No usar para construcción sobre Dataverse
-  (`dataverse-builder`) ni sprint/daily (`delivery-manager`).
+description: >-
+  Fase 1 (Plan): refinamiento, User Stories con Gherkin, mapeo al BPC, FDD por GAP, historias
+  refinadas en ADO, fit/gap, recalibración de esfuerzo y Solution Blueprint. Usar con RFP,
+  notas o transcripciones, o para cerrar Fase 1. No para construir (dataverse-builder) ni para
+  el sprint (delivery-manager).
 model: sonnet
 ---
 

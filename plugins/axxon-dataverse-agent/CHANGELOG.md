@@ -1,5 +1,11 @@
 # Changelog — Axxon Dataverse Agent
 
+## v0.13.2 (2026-11-06)
+
+- **Descripciones de los 5 subagentes acortadas:** de 4.084 a 1.559 caracteres en total
+  (~300 cada una). Se cargan en cada turno en el listado de agentes. Cada una mantiene fase,
+  qué hace, cuándo usarlo y cuándo no (con el subagente que corresponde en su lugar).
+
 ## v0.13.1 (2026-11-04)
 
 - **Fix — `validate_project_context.py` se caía en consolas Windows:** los ✅/❌/⚠️ tiraban
